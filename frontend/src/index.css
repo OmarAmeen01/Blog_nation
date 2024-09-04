@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.animation {
+  animation:skelton 2s ease-in-out 0s infinite
+}
+@keyframes skelton {
+  0%{
+    opacity: .3;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+#form-loading{
+ height: 5px;
+ width: 200px;
+ border-radius:15rem;
+ background-color: #44bbdf;
+animation:formloading 2s ease-in-out 0s infinite ; 
+}
+
+@keyframes  formloading {
+    0%{
+  transform: translateX(-1000px);
+    }
+    100%{
+        transform: translateX(400px);
+    }
+}
+
+.switch-checkbox {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 47px;
+  height: 24px;
+  background: grey;
+  border-radius: 100px;
+  position: relative;
+  transition: background-color .2s;
+}
+
+.switch-label .switch-button {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 45px;
+  transition: 0.2s;
+  background: #fff;
+  box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+}
+
+.switch-checkbox:checked + .switch-label .switch-button {
+  left: calc(100% - 2px);
+  transform: translateX(-100%);
+}
+
+.switch-label:active .switch-button {
+  width: 60px;
+}
+
+#editorjs {
+
+  padding: 20px;
+}
+
+/* Override default header styles to remove formatting */
+#editorjs h3{
+  font-size:2.5rem;
+  font-family:mono;
+  font-weight: 600;
+  
+ }
+ #editorjs h2{
+  font-size:2rem;
+  font-family:mono;
+  font-weight: 600;
+  
+ }
+ #editorjs h4{
+  font-size:3rem;
+  font-family:mono;
+  font-weight: 600;
+  
+ }
+/* Header block general styles */
+.ce-paragraph {
+  color: #000;
+  font-size: 1.5rem; /* Ensure text color is distinguishable */
+  font-family: mono;
+  min-height: 20px; /* Adjust to ensure there's space for placeholder */
+}
+
+
+/* Paragraph block styles */
