@@ -36,11 +36,10 @@ model User {
 
 model Post {
   id String @id @default(uuid())
-  title String?
-  description String?
   user_id String
   created_at DateTime @default(now())
-  catagory String
+  category String
+  content Content[]
   images Images[] 
   likes Likes[]
   comments Comments[]
@@ -53,7 +52,14 @@ model Likes{
   post_id String
   user User @relation(fields: [user_id],references: [id], onDelete: Cascade, onUpdate: Cascade) 
   post Post  @relation(fields: [post_id],references: [id],onDelete: Cascade, onUpdate: Cascade)
-  @@id([user_id,post_id]) //composite primary key
+  @@id([user_id,post_id]) 
+}
+model Content{
+  id String @default(uuid())
+  blocks Json
+  post_id String 
+  post Post @relation(fields: [post_id],references: [id])
+   @@id([id,post_id])
 
 }
 

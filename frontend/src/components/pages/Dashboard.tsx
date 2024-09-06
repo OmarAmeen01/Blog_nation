@@ -8,6 +8,7 @@ import DashboardSkeletonLoader from "../common/loaders/skeltonLoaderDashboard";
 import SomethingWentWrong from "../../assets/something-went-wrong.png"
 import InteractionPanel from "../common/InteractionPanel";
 import AdmimEditPannel from "../common/adminEditPannel";
+import ListPost from "../common/ListPost";
 
 export default function Dashboard(){
     const [posts,setPosts]= useState<Post[]>([])
@@ -44,31 +45,9 @@ useEffect(()=>{
 </div>: posts.length===0 ?
   <NoPostFound/>: <section className=" bg-white">
   <DashboardTopNav/>
- <article id="posts" className="px-4 lg:px-14 h-[70vh]">
+ <article id="posts" className="px-4 lg:px-14 min-h-[80vh]">
      {posts.map(post => {
-    return (
-<div  key={post.id} id={post.id} className="p-2   shadow-md my-1 bg-white  flex max-[630px]:justify-center max-[630px]:items-center    sm:justify-between">
-
-<div className="  relative  w-full p-2" id="post desc " >
-<div id="author" className="flex">
-<img src={post.user.image} className="rounded-full  border=-black border h-3 w-6 md:h-12 md:w-12" alt="" />
-<p className="text-gray-400 text-sm p-2 md:text-lg">{post.user.first_name} {post.user.last_name}</p>
-</div>
-<h4 className="text-2xl font-bold p-2 md:text-3xl">{post.title.slice(0,30)}...</h4>
-<p className="text-gray-400 text-sm  p-2 md:tex-lg">{formatDate(post.created_at).timeAgo}</p>
-
-<p className=" p-2 md:text-xl">{post.description.slice(0,135)}</p>
-<div id="pannels" className="flex justify-between">
-<InteractionPanel/> <AdmimEditPannel postId={post.id} />
-</div>
-</div>
-{post.images[0].image &&<div className="w-[300px]" >
-          <img src={post.images[0]?.image} className="h-[130px] w-[130px] shadow-md sm:h-40 sm:w-40 md:h-52 md:w-52" alt="" />
-          </div>}
-
-</div>
-
-    ) 
+    return ( <ListPost post={post}/> ) 
   })
 
 }

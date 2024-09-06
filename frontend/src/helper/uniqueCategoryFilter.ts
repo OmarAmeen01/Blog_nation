@@ -4,7 +4,7 @@ export default function uniqueCategoryFilter(Posts:Post[]){
 const catagoriesFromposts:string[] =[]
 
 Posts.forEach(post=>{
-    return catagoriesFromposts.push(post.catagory)
+    return catagoriesFromposts.push(post.category)
 })
 
   const uniqueSet = new Set(catagoriesFromposts)

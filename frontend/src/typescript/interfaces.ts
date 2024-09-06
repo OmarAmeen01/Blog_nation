@@ -19,15 +19,35 @@ export  interface User {
   export interface Likes{
 
   }
+  interface BlockData{
+text:string,
+ level:number
+  }
+
+export interface Block{
+  
+id:string,
+data:BlockData
+type:string
+}
+export interface InputData{
+  id:string,
+  blocks:Block[],
+  post_id:string
+}
+
+interface Content{
+  id:string,
+  post_id:string,
+  blocks:Block[]
+}
  export interface Post {
-    
-  catagory: string,
+  category: string,
+  content:Content[]
   created_at: string,
-  description: string
   id: string
   images: Image[],
-  title: string
-  user:User ,
+  user:User,
   user_id: string,
   }
 

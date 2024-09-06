@@ -18,10 +18,19 @@ domain_title:z.string().max(50).optional()
 })
 
 export const validatePost = z.object({
-    title:z.string().max(50).optional(),
-    description:z.string().min(50).optional(),
-    image:z.string().url().optional(),
-    category:z.string().max(100).optional()
+categort: z.string().optional(),
+content:z.object({
+    blocks:z.array(z.object({
+        data:z.object({
+            text:z.string(),
+            level:z.number()
+        }),
+       id:z.string(),
+       type:z.string()
+    })),
+    time:z.number()
+})
+    
 })
 
 export const validateChangePassword= z.object({

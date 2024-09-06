@@ -49,12 +49,10 @@ function handCancelClick(){
 
 }
 
-
-
 return  isLoading?null: verifyPostOwner(postId,posts)&&
 <>
 {isPannelClick&&<div id="adminOptions">
-    <div id="overlay " className="absolute top-0 left-0  w-full h-[130vh]" onClick={()=>{
+    <div id="overlay " className="absolute top-0 left-0  w-full h-[130vh]" title="Admin edit pannel" onClick={()=>{
             setIsPannelClicked(prevState=>!prevState)
         }}></div>
         <div className="bg-white  absolute flex flex-col right-2 bottom-12 border-2 gap-4 p-6 shadow-md">
@@ -73,7 +71,8 @@ return  isLoading?null: verifyPostOwner(postId,posts)&&
           </button>
 
 </div>
-<ConfimationDailog ShouldShow={isDeleteClicked} handleCancel={handCancelClick} handleVisibility={()=>setIsPannelClicked(prev=>!prev)}  handleAgree={()=>handleDeleteClick(postId)} title="Delete Story" description="Deleting the story is a irreversible, are you sure?" />
+<ConfimationDailog
+ShouldShow={isDeleteClicked} handleCancel={handCancelClick} handleVisibility={()=>setIsPannelClicked(prev=>!prev)}  handleAgree={()=>handleDeleteClick(postId)} title="Delete Story" description="Deleting the story is a irreversible, are you sure?" />
 
 </>
 

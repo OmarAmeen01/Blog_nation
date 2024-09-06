@@ -9,7 +9,8 @@ import {store} from "./store/store.ts"
 import { Dashboard,Settings,Home } from './components/bridge.ts'
 import Authenticator from './components/common/authenticator.tsx'
 import Profile from './components/pages/Profile.tsx'
-import AddPost from './components/pages/Addpost.tsx'
+import AddPost from './components/editor/Addpost.tsx'
+import EditPost from './components/editor/EditPost.tsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path:"/addPost",
         element:<Authenticator children={<AddPost/>} />
+      },
+      {
+        path:"/addPost/:postId",
+        element:<Authenticator children={<EditPost/>}/>
       }
     ]
   }

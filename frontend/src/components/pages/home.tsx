@@ -14,6 +14,7 @@ import sortPosts from "../../helper/sortPosts"
 import uniqueCategoryFilter from "../../helper/uniqueCategoryFilter"
 import AdmimEditPannel from "../common/adminEditPannel"
 import DashboardSkeletonLoader from "../common/loaders/skeltonLoaderDashboard"
+import ListPost from "../common/ListPost"
 //function 
 const postApiUrl = import.meta.env.VITE_POST_API_URL
 //  interface
@@ -39,6 +40,7 @@ const [categoryName,setCategoryName] =useState("")
     const response = await axios.get(`${postApiUrl}/posts`)
 
     if(response.data.status){
+      console.log(response.data.data)
      dispatch(setPosts([true, response.data.data]))
      setblogPosts(response.data.data)
      setIsLoading(false)
@@ -141,62 +143,24 @@ const [categoryName,setCategoryName] =useState("")
 </div>
 </div> */}
 
-<div id="posts">
+  <div id="posts">
       
 
-       {isCategoryCliked?sortPosts(blogPosts,categoryName).map(post=>{
+   {isCategoryCliked?sortPosts(blogPosts,categoryName).map(post=>{
         return(
-          <div key={post.id} id={post.id} className="p-2 shadow-sm flex max-[630px]:justify-center max-[630px]:items-center bg-white sm:justify-between">
-
-       <div className="w-full relative   p-2" id="post desc" >
-        <Link to={`/profile/${post.user.id}`}><div id="author" className="flex">
-        <img src={post.user.image} className="rounded-full  border=-black border h-8 w-8 md:h-12 md:w-12" alt="" />
-        <p className="text-gray-400 text-sm p-2 md:text-lg">{post.user.first_name} {post.user.last_name}</p>
-        </div>
-        </Link>
-          <h4 className="text-2xl font-bold p-2 md:text-3xl">{post.title}</h4>
-          <p className="text-gray-400 text-sm  p-2 md:tex-lg">{dateConverter(post.created_at).timeAgo}</p>
-      
-          <p className=" p-2 md:text-xl">{post.description.slice(0,135)}</p>
-      <div className="flex justify-between"> <InteractionPanel/> <AdmimEditPannel postId={post.id}/></div>
-          </div>
-          {post.images[0].image &&<div className="w-[300px]" >
-          <img src={post.images[0]?.image} className="h-[130px] w-[130px] shadow-md sm:h-40 sm:w-40 md:h-52 md:w-52" alt="" />
-          </div>}
-     
-      </div>
+          <ListPost post={post}/>
         )
-       }): blogPosts.map(post => {
-            return (
-<div key={post.id} id={post.id} className="p-2  flex bg-white border-2 shadow-lg my-3 max-[630px]:justify-center max-[630px]:items-center  sm:justify-between">
-
-<div className="   p-2" id="post desc">
-<Link to ={`/profile/${post.user_id}`}> <div id="author" className="flex relative">
- <img src={post.user.image} className="rounded-full  border=-black border h-3 w-6 md:h-12 md:w-12" alt="" />
- <p className="text-gray-400 text-sm p-2 md:text-lg">{post.user.first_name} {post.user.last_name}</p>
- </div>
- </Link>
-   <h4 className="text-2xl font-bold p-2 md:text-3xl">{post.title}</h4>
-   <p className="text-gray-400 text-sm  p-2 md:tex-lg">{dateConverter(post.created_at).timeAgo}</p>
-
-   <p className=" p-2 md:text-xl">{post.description.slice(0,135)}</p>
-   <div className="flex justify-between relative"> <InteractionPanel/> <AdmimEditPannel postId={post.id}/></div>
-   </div>
-   {post.images[0].image &&<div className="w-[300px]" >
-          <img src={post.images[0]?.image} className="h-[130px] w-[130px] shadow-md sm:h-40 sm:w-40 md:h-52 md:w-52" alt="" />
-          </div>
-          }
-
-</div>
-            ) 
+       })
+       : blogPosts.map(post => {
+            return (<ListPost post={post}/> ) 
           })} 
 
-          </div>
-          </article>
+   </div>
+</article>
         <aside id="category" className="rounded-lg hidden min-w-72 p-4 lg:block bg bg-[rgba(0,0,0,0.1)]">
       <h4 className=" text-xl font-bold p-2 mb-4">Recommended Topics</h4>
               
-            <div id="catagory-buttons" className=" ">
+            <div id="category-buttons" className=" ">
               <button id="all" className="p-2 bg-white  rounded-lg hover:scale-110 hover:opacity-80 transition-all  duration-200 font-mono " onClick={()=>{
                 setCategoryClicked(false)
               }}>All</button>

@@ -20,43 +20,7 @@ blogRouter.use('*', cors({
     credentials:true,
     allowHeaders: ['Content-Type', 'Authorization'] 
 }));
-type data = {[key:string]:string}
-// function
-function objectfromPostDetails(title:string,description:string,images:string[]){
-const post = {
-    title,
-    description,
-}
-return post
-}
 
-function arrayFromImages(images:string[],post_id:string){
-    const imagesArr=images.map(image=>{
-        return {image,post_id}
-    })
-    return imagesArr
-}
-function objectformImages(images:string[]){
- const data:data ={}
-for (let image of images ){
-data["image"]=image
-}
-return data
-}
-
-
-function descriptionObjectFromInput(fordData:FormData){
-    const postDescFields = ['title','description']
-    type data = {[key:string]:String}
-    const data:data ={}
-for(let field of postDescFields){
-    const value = fordData.get(field)
-    if(typeof value==="string"){
-        data[field]=value
-    }
-}
-return data
-}
 
 // secrets
 const DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZTEwYzFiYzMtY2NkMy00NjViLWJhMjUtNGNmMmJlNTI1OGYwIiwidGVuYW50X2lkIjoiOWUyNzQ0MTBhMTI3YzY0YzM4Y2NlMDBhNWVmMWQxYmY0Mzk0MGMxNGVmOWM3YzQyYTk4MzRiMmE3YzEyZDNjZCIsImludGVybmFsX3NlY3JldCI6IjgwNTA4YjMyLTA0NjktNGYxMi1iNmFhLTYwOWYxMWYyNTRjZSJ9.OkLm_nAKQzSzfZI_qxiBlerrMYFwLX_eprlaCWxQCYU"
@@ -80,6 +44,7 @@ if(typeof userId==="string"){
     const posts =await prisma.post.findMany({
        where:{user_id:userId},
        include:{
+        content:true,
          likes:{
             include:{
                 user:{
@@ -165,6 +130,7 @@ try {
    const post = await prisma.post.findFirst({
     where:{id:postId},
     include:{
+        content:true,
         likes:{
             include:{
                 user:{
@@ -236,6 +202,7 @@ try {
 
    const posts= await prisma.post.findMany({
 include:{
+    content:true,
     likes:{
         include:{
             user:{
@@ -301,16 +268,10 @@ blogRouter.post("/addpost",authMiddleware,async(c)=>{
  const jwt = decode(cookie)
  const {userId} = jwt.payload
 
-const formData = await c.req.formData()
-const images= formData.getAll("image") as string[]
-const title = formData.get("title") as string
-const description = formData.get("description") as string
+ const body =await c.req.json()
 
-const post = objectfromPostDetails(title,description,images,category)
 
-const validate = validatePost.safeParse(post)
 
-if(validate.success){
 
     try {
 
@@ -318,53 +279,47 @@ if(validate.success){
             datasourceUrl:DATABASE_URL
            }).$extends(withAccelerate())
 
-           if(typeof userId==="string"){
+if(typeof userId==="string"){
+    const post = await prisma.post.create({
+        data:{
+            user_id:userId,
+            category:body.category,
+        }
+    })
 
-               const postCreated = await prisma.post.create({
-                   data:{
-                       title:title,
-                       description:description,
-                       user_id:userId,
-                       catagory:category
-                       }
-               })
-
-               //notes here
-               if(postCreated){
-                   const postId= postCreated.id
-                  const  imagesArr = arrayFromImages(images,postId)
-                const imagesUploaded = await  prisma.images.createMany(
-                    {
-                        data:imagesArr
-                    })
-                    if(imagesUploaded){
-                     return c.json({
-                        msg:"uploaded post succesfully",
-                        status:true,
-                        authentication:true,
-                     })
-                    }else{
-                        return c.json({
-                            msg:"couldn't upload your post try again later ",
-                            status:false,
-                            authentication:true
-                         },500)
-                    }
-               }else{
-                return c.json({
-                    msg:"couldn't uploaded your post try again later",
-                    status:false,
-                    authentication:true
-                 })
-               }
-           }
-
-
+    if(post){
+   
+       const content=await prisma.content.create({
+                data:{
+                    post_id:post.id,
+                    blocks:body.content.blocks
+                }
+            })
+        
+     
+        if(content){
             return c.json({
-                msg: "You don't have access to  perform these tasks",
-                authentication: false,
+                msg:"Post uploaded succesfully",
+                status:true,
+            })
+        }else{
+            return c.json({
+                msg:"post upload unsuccessfull",
                 status:false
             })
+        }
+       
+       
+        
+    }else{
+        return c.json({
+            msg:"Post was not  Created",
+            status:false
+        })
+    }
+
+}        
+         
         
         
     } catch (error) {
@@ -375,13 +330,6 @@ if(validate.success){
             status:false
         })
     }
-}else{
- return c.json({
-    msg:validatePost.safeParse(post).error?.issues[0].message,
-    authentication:true,
-    status:false
- })
-}
 
 
 })
@@ -393,20 +341,57 @@ if(validate.success){
 blogRouter.put("/addpost/:postid",authMiddleware,async(c)=>{
     
 const postId= c.req.param("postid") // note here how to get parameter
-const {deletedImages} =await c.req.json()
-const formData =await c.req.formData()
-const postDescription =descriptionObjectFromInput(formData)
-const images  =formData.getAll('image')  as string[]
-
-
+const body = await c.req.json()
+let date;
+if(!body.time){
+     date = new Date()
+}else{
+    const unixDate=body.content.time
+    date = new Date(unixDate)
+}
 try {
     const prisma = new PrismaClient({
         datasourceUrl:DATABASE_URL
        }).$extends(withAccelerate())
 
+     const response = await prisma.post.update({
+        where:{id:postId},
+        data:{
+            category:body.category,
+            created_at:date
+        }
+     })  
+  if(response){
+    const updateContent = await prisma.content.update({
+        where:{
+            id_post_id:{
+                id:body.contentId,
+                post_id:postId,
+            }
+
+        },
+        data:{
+         blocks:body.content.blocks
+        }
+    })
     
- 
-  
+     if(updateContent){
+        return c.json({
+            msg:"Post updated successfully",
+            status:true,
+        })
+     }
+     
+     return c.json({
+        msg:"Post update unsuccessfull",
+        status:false,
+    })
+  }
+  return c.json({
+    msg:"Post update unsuccessfull",
+    status:false,
+  })
+
 } catch (error) {
     console.log(error)
     return c.json({
