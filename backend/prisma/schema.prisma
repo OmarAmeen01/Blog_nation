@@ -58,7 +58,7 @@ model Content{
   id String @default(uuid())
   blocks Json
   post_id String 
-  post Post @relation(fields: [post_id],references: [id])
+  post Post @relation(fields: [post_id],references: [id],onDelete:Cascade,onUpdate:Cascade)
    @@id([id,post_id])
 
 }

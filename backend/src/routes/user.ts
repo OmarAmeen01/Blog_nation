@@ -601,7 +601,6 @@ const body = await c.req.json()
 
 userRouter.get("/login_status",async(c)=>{
  const cookie = getCookie(c,"authorization")
-console.log(cookie,"dfkjdsl;fjldsfj")
  if(cookie){
     const jwtToken = decode(cookie) 
        const {email,userId} = jwtToken.payload
@@ -701,7 +700,7 @@ userRouter.get('/notification_settings',authMiddleware,async(c)=>{
 userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
     const body = await c.req.json()
     const id  = c.req.param('id')
-    console.log(id)
+
     const cookie = getCookie(c,"authorization")
     if(cookie){
        const jwtToken = decode(cookie) 

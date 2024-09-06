@@ -20,6 +20,7 @@ const blogUrl = import.meta.env.VITE_POST_API_URL
 useEffect(()=>{
 
     axios.get(`${blogUrl}/dashboard`,{withCredentials:true}).then(response=>{
+        console.log(response)
     if(response.data.data){
         setPosts(response.data.data)
         setIsLoading(false)

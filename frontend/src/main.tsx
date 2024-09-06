@@ -7,10 +7,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import {store} from "./store/store.ts"
 import { Dashboard,Settings,Home } from './components/bridge.ts'
-import Authenticator from './components/common/authenticator.tsx'
+import Authenticator from './components/common/authenticators/authenticator.tsx'
 import Profile from './components/pages/Profile.tsx'
 import AddPost from './components/editor/Addpost.tsx'
 import EditPost from './components/editor/EditPost.tsx'
+
+import PostComponent from './components/pages/post.tsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
       {
         path:"/addPost/:postId",
         element:<Authenticator children={<EditPost/>}/>
+      },
+      {
+        path:"/post/:postId",
+        element:<PostComponent/>
       }
     ]
   }
