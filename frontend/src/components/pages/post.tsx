@@ -39,19 +39,19 @@ export default function PostComponent() {
 
     }, [])
 
-    return loading ? <DashboardSkeletonLoader /> : <section id="post" className="p-20 bg-white ">
+    return loading ? <DashboardSkeletonLoader /> : <section id="post" className="md:p-20 p-8 bg-white ">
         <article id="user" className="relative p-3">
             <Link to={`/profile/${post.user_id}`}>
                 <div id="author" className="flex relative" title="Go to Profile">
-                    <img src={post.user.image} className="rounded-full  border=-black border h-3 w-6 md:h-12 md:w-12" alt="" />
+                    <img src={post.user.image} className="rounded-full  border=-black border h-11 w-11 md:h-12 md:w-12" alt="" />
                     <p className="text-gray-500 text-sm p-2 md:text-lg font-semibold">{post.user.first_name} {post.user.last_name}</p>
                 </div>
             </Link>
-            <div id="meta" className="absolute  top-10 left-16 ">
+            <div id="meta" className="absolute  md:top-10 top-8 left-14 md:left-16 ">
             <p className="text-gray-500 text-sm  p-2 md:tex-lg ">{formatDate(post.created_at).timeAgo}</p>
             </div>
         </article>
-     <article id="controllers" className="p-3">
+     <article id="controllers" className="p-3 flex relative justify-between">
         <InteractionPanel /> <AdmimEditPannel postId={post.id}/>
      </article>
         <article id="post" className="p-3">

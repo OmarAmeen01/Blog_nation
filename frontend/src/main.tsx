@@ -13,6 +13,7 @@ import AddPost from './components/editor/Addpost.tsx'
 import EditPost from './components/editor/EditPost.tsx'
 
 import PostComponent from './components/pages/post.tsx'
+import EditorAuthenticator from './components/common/authenticators/editorAuthenticator.tsx'
 const router = createBrowserRouter([
   {
     path:"/",
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path:"/addPost/:postId",
-        element:<Authenticator children={<EditPost/>}/>
+        element:<Authenticator><EditorAuthenticator children={<EditPost/> }/></Authenticator>
       },
       {
         path:"/post/:postId",

@@ -8,6 +8,7 @@ import { setIsFormVisible, setIsSignupClicked } from "../../store/authSlice"
 import {Store} from "../../typescript/interfaces"
 import DropDown from "./DropDown"
 import Profile from "../../assets/profile.png"
+import Signin from "../auth/signin"
 import { useState } from "react"
 const navLinks = [
     {
@@ -28,6 +29,7 @@ export default function Nav({className}:{className?:string}){
     const status = useSelector<Store>(state=>state.auth.status)
     const isFormVisible= useSelector<Store>(state=>state.auth.isFromVisible) as boolean
     const isSignupClicked= useSelector<Store>(state=>state.auth.isSignupClicked) as boolean
+    const isSigninClicked = useSelector<Store>(state => state.auth.isSigninClicked) as boolean
    const [isProfileClicked,setIsProfileClicked] =useState(false)
     const dispatch =useDispatch()
      function handleClick(){
@@ -63,6 +65,7 @@ return(
 </div>
 </nav>
 {isSignupClicked&& <Signup/>}
+{isSigninClicked && <Signin />}
 </>
 )
 }

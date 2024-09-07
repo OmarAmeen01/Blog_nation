@@ -90,17 +90,17 @@ export default function Signin() {
 
 
 
-    return (isFormVisible && isSigninClicked)&&<><div className="h-[100%] w-[100%] top-0 left-0 bg-black bg-opacity-60 fixed border-black border-2 grid place-items-center " onClick={()=>{
+    return (isFormVisible && isSigninClicked)&&<><div className="fixed   bg-[rgba(0,0,0,0.4)] -top-14 left-0 z-10 w-[104.6vw] h-[122vh]" onClick={()=>{
          dispatch(setIsSigninClicked(!isSigninClicked))
         dispatch(setIsFormVisible(!setIsFormVisible)) }}>    </div>
     
-<div className="fixed top-[25%] left-[40%]">
+<div className="absolute  z-30 top-[50%] left-[45%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4 rounded-lg shadow-xl mt-24 mb-24">
        {isSignupClicked?<Signup/>:<form className="bg-white px-6 py-2 rounded-lg shadow-lg   relative overflow-hidden " onSubmit={handleSubmit}>
      {sendingResponse&& <div id="form-loading" className="absolute top-0" ></div>}
        <h2 className="font-bold text-2xl p-2 text-center">Sign in to your account</h2>
             { error.isError&&<p className="text-red-500 text-lg text-center">{error.error}</p>}   
             <InputComponet type="email" name="email" 
-            className={`"focus:border-2 focus:border-black w-[28rem] h-10" ${isEmailInvalid? "border-red-500  border-2":"h-10"}`}
+            className={`"focus:border-2 focus:border-black w-full h-10" ${isEmailInvalid? "border-red-500  border-2":"h-10"}`}
             placeholder="omarameen@gmail.com" value={userDetails.email} isValid={isEmailInvalid} error="Please enter a valid email address." onChange={(e) => {
                 setIsEmailInvalid(false);
                 setUserDetails(prevState => ({
@@ -112,7 +112,7 @@ export default function Signin() {
             <div id="pass-word" className=" relative group  h-16border-2 border-black">
                 <InputComponet id="Password" type={isPasswordHidden ? "password" : "text"} placeholder="Password..." name="password"
                 label="password"
-                className={`"focus:border-2 focus:border-black  h-10" ${isPasswordInvalid? "border-red-500  border-2":"h-10"}`}
+                className={`"focus:border-2 focus:border-black w-full h-10" ${isPasswordInvalid? "border-red-500  border-2":"h-10"}`}
                     maxLength={30}
                     isValid={isPasswordInvalid} error="Enter a Valid Password" value={userDetails.password} onChange={(e) =>{ 
                         setIsPasswordInvalid(false)

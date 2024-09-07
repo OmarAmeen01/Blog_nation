@@ -763,3 +763,46 @@ return c.json({ msg:"Failed to find the feed",
   
   
 })
+
+
+blogRouter.get("/authenticate_editor/:postId",authMiddleware,async(c)=>{
+    
+        const postId = c.req.param("postId")
+        const cookie = getCookie(c,"authorization") as string
+        const jwt = decode(cookie)
+        const {userId} = jwt.payload
+
+
+        try {
+            const prisma = new PrismaClient({
+                datasourceUrl:DATABASE_URL
+               }).$extends(withAccelerate())
+
+               const  post= await prisma.post.findFirst({
+                 where:{
+                      id:postId,
+                 }
+                 
+
+                
+               })
+               if(post){
+                if(post.user_id===userId){
+                    return c.json({
+                        msg:"User is owner of the of the post",
+                        status:true,
+                    })
+                }else{
+                    return c.json({
+                        msg:"user is not owner of the post ",
+                        status:false,
+                    })
+                }
+               }
+        } catch (error) {
+            return c.json({
+                msg:"Something went wrong",
+                status:false
+            })
+        }
+})

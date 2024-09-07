@@ -103,11 +103,11 @@ export default function Signup() {
 
 
 
-    return    (isFormVisible && isSignupClicked)&&  <><div className="h-[100%] w-[100%]  fixed top-0 left-0 bg-black bg-opacity-60 " onClick={()=>{  dispatch(setIsSignupClicked(!isSignupClicked))
+    return    (isFormVisible && isSignupClicked)&&  <><div className="fixed   bg-[rgba(0,0,0,0.4)] -top-14 left-0 z-10 w-[104.6vw] h-[122vh]  " onClick={()=>{  dispatch(setIsSignupClicked(!isSignupClicked))
        
             dispatch(setIsFormVisible(!isFormVisible)) }}>    
             </div>
-      <div className="fixed top-[10%] left-[30%]">
+      <div className="absolute  z-30 top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-4 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-2 sm:p-4 my-24 ">
      
 {isSigninClicked?<Signin/> :   <form className="bg-white px-6 py-2 rounded-lg shadow-lg  relative overflow-hidden max-w-[523px]" onSubmit={handleSubmit}>
      {sendingResponse&&<div id="form-loading" className="absolute top-0" ></div>}
@@ -115,11 +115,11 @@ export default function Signup() {
             { error.isError&&<p className="text-red-500 text-lg text-center">{error.error}</p>}
              
 
-            <div id="name" className="flex gap-6">
+            <div id="name" className="flex gap-6 flex-col sm:flex-row">
 
 
                 <InputComponet type="text" name="first_name " 
-                className={`"focus:border-2 focus:border-black w-56  h-10" ${isFirstNameEmpty? "border-red-500  border-2":"h-10"}`}
+                className={`"focus:border-2 focus:border-black sm:w-56 w-full h-10" ${isFirstNameEmpty? "border-red-500  border-2":"h-10"}`}
                 placeholder="Omar...." isValid={isFirstNameEmpty} error="Enter First name" value={userDetails.first_name || ""} onChange={(e) => {
                 
                     setUserDetails(prevState => ({
@@ -130,7 +130,7 @@ export default function Signup() {
                 }} label="First Name" />
 
                 <InputComponet type="text" name="last_name"  isValid={isLastNameEmpty} error="Enter Last name" 
-                  className={`"focus:border-2 focus:border-black w-56  h-10" ${isLastNameEmpty? "border-red-500  border-2":"h-10"}`}
+                  className={`"focus:border-2 focus:border-black sm:w-56 w-full  h-10" ${isLastNameEmpty? "border-red-500  border-2":"h-10"}`}
                 placeholder="Ameen..." value={userDetails.last_name || ""} onChange={(e) => {
                   
                     setUserDetails(prevState => ({
