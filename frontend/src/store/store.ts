@@ -6,7 +6,8 @@ export const store = configureStore({
     reducer:{
       auth:userReducer,
     post:postReducer,
-    noti:notiReducer
+    noti:notiReducer,
+
     }
 })
 //Note  export the type of reducer as returntype 

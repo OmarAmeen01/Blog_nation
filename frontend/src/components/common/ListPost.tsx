@@ -25,7 +25,7 @@ export default function ListPost({post}:{post:Post}){
    <p className=" p-2 md:text-xl">{post.content[0].blocks[1].data.text.slice(0,135)}</p>
    </div>
    </Link>
-   <div className="flex justify-between relative"> <InteractionPanel/> <AdmimEditPannel postId={post.id}/></div>
+   <div className="flex justify-between relative"> <InteractionPanel postId={post.id}/> <AdmimEditPannel postId={post.id}/></div>
    </div>
    {post?.images[0]?.image &&<div className="w-[300px]" >
           <img src={post.images[0]?.image} title="Post Image" className="h-[130px] w-[130px] shadow-md sm:h-40 sm:w-40 md:h-52 md:w-52" alt="" />

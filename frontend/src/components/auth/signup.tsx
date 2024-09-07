@@ -73,7 +73,7 @@ export default function Signup() {
                   console.log(response)
                     if (response.data.status) {
                         
-
+                        window.location.reload()
                         setSendingResponse(false)
                         dispatch(authenticate([response.data.status, response.data.data]))
                          dispatch(setIsFormVisible(false))

@@ -56,7 +56,7 @@ export default function Signin() {
                   
                 
                     if (response.data.status) {
-                        
+                           window.location.reload()
                             dispatch(setIsFormVisible(false))
                             dispatch(setIsSigninClicked(false))
                             dispatch(setIsSignupClicked(false))

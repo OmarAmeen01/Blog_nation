@@ -18,6 +18,10 @@ export  interface User {
   }
   export interface Likes{
 
+    id:string
+    post_id:string
+    user:User
+    user_id:string
   }
   interface BlockData{
 text:string,
@@ -47,6 +51,7 @@ interface Content{
   created_at: string,
   id: string
   images: Image[],
+  likes?:Likes[],
   user:User,
   user_id: string,
   }
@@ -74,7 +79,6 @@ export interface ProfileDetails{
   cover_image?:string
 
 }
-
 export interface Store{
    noti:Noti
     auth: {

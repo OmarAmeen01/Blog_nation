@@ -8,7 +8,6 @@
  import profile from "../../assets/profile.svg"
 import emailEncoder from "../../helper/emailEcoder" 
 import write  from "../../assets/write.svg"
-
 export default function DropDown({shouldShow, handleVisibility}:{shouldShow:boolean,handleVisibility:()=>void}){
     const dispatch =useDispatch()
     const userEndPoint = import.meta.env.VITE_USER_API_URL
@@ -24,6 +23,7 @@ export default function DropDown({shouldShow, handleVisibility}:{shouldShow:bool
             dispatch(unAuthenticate())
         navigate("/")
         handleVisibility()
+        window.location.reload()
          }).catch(error=>{
             console.log(error)
          })

@@ -510,7 +510,7 @@ blogRouter.post("/like/:postid",authMiddleware,async(c)=>{
 
 })
 
-blogRouter.get("/like/:postid",async(c)=>{
+blogRouter.get("/likes/:postid",async(c)=>{
   const postId = c.req.param("postid")
    try {
     const prisma = new PrismaClient({
@@ -560,6 +560,65 @@ blogRouter.get("/like/:postid",async(c)=>{
 
     })
    }
+})
+blogRouter.delete("/like/:postid",async(c)=>{
+    const postId = c.req.param("postid")
+    const cookie = getCookie(c,"authorization") as string
+    const  jwt = decode(cookie)
+    const {userId} = jwt.payload
+ try {
+     const prisma = new PrismaClient({
+         datasourceUrl:DATABASE_URL
+        }).$extends(withAccelerate())
+    
+   
+
+
+      if(typeof userId ==="string"){
+        const likeByUser = await prisma.likes.findFirst({
+            where:{
+                post_id:postId,
+                user_id:userId
+            }
+         })
+
+         if(likeByUser){
+
+             const likedPost = await prisma.likes.delete({
+                where:{
+                 user_id_post_id:{
+                     user_id:userId,
+                     post_id:postId
+                 }
+                }
+               })
+               if(likedPost){
+                return c.json({
+                    msg:"unLiked the post successfully",
+                    status:true
+                })
+               }
+         }else{
+            return c.json({
+                msg:'you never liked the post, why that hate bro?',
+                status:false
+            })
+         }
+
+
+         return c.json({
+            msg:"You are not authorized to do such action",
+            status:false,
+         })
+      }
+ } catch (error) {
+    console.log(error)
+    return c.json({
+        msg:"Something went wrong",
+        status:false,
+     })
+  }
+ 
 })
 
 blogRouter.post("/comment/:postid",authMiddleware,async(c)=>{
