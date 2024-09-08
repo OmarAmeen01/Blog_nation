@@ -15,6 +15,7 @@ import { Store } from "../../typescript/interfaces"
 import { useSelector,useDispatch } from "react-redux"
 import hasUserLiked from "../../helper/hasUserLiked"
 import { setIsFormVisible, setIsSigninClicked } from "../../store/authSlice"
+import CommentComponet from "./comments"
 
 
 
@@ -97,13 +98,19 @@ export default function ({ postId }: { postId: string }) {
   }
    }
 
+
+   function handleCommentClick(){
+      setisCommentClicked(prev=>!prev)
+   }
+
    return <div className="flex gap-3 p-2">
 
       <button onClick={HandleLikeClick} className="hover:opacity-60 flex gap-1">
          <img className="h-6 w-6 " src={isLikeClicked ? unlike : like} title="Like" alt="" />
          <p id="like" className="text-gray-500">{likeCount}</p>
       </button>
-      <button className="hover:opacity-60 flex gap-1 ">
+      <CommentComponet isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>
+      <button className="hover:opacity-60 flex gap-1 " onClick={handleCommentClick}>
          <img src={commet} className="h-6 w-6 hover:opacity-60" alt="" title="Comment" />
          <p id="like" className="text-gray-500">1</p>
       </button>
@@ -113,7 +120,7 @@ export default function ({ postId }: { postId: string }) {
              <div id="overlay " className="absolute -bottom-40 left-0  w-[100%] h-[130vh] z-10"  onClick={()=>{
             setisShareClicked(prevState=>!prevState)
         }}></div>
-            <div className="absolute  bottom-9 bg-gray-200  shadow-3xl border-2 rounded-lg flex flex-col">
+            <div className="absolute z-20  bottom-9 bg-gray-200  shadow-3xl border-2 rounded-lg flex flex-col">
             <h4 className="text-center text-lg font-bold p-2">Share On</h4><div id="links" className="flex p-2  gap-3 flex-row">
           {ShareLinks.map(link=>{
           return   <a href={link.link} title={`share on ${link.name}`} target="_blank" ><img src={link.img} className="h-6 w-6 transition-all duration-200 ease-in-out  hover:-translate-y-1 hover:scale-105"  alt={link.name} /></a>

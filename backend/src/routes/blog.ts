@@ -639,14 +639,14 @@ try {
 
      if(typeof text==="string" && typeof userId==="string"){
 
-        const uploadedCommnet = await prisma.comments.create({
+        const uploadedCommet = await prisma.comments.create({
             data:{
             text,
             post_id:postId,
             user_id:userId,
             }
            })
-           if(uploadedCommnet){
+           if(uploadedCommet){
             return c.json({
                 msg:"uploaded your comment successfully",
                 status:true,
@@ -677,7 +677,68 @@ try {
 
 
 })
+blogRouter.put("edit_comment/:postid/:commentid",authMiddleware,async(c)=>{
+    const postId = c.req.param('postid')
+    const commentId = c.req.param('coommentid')
+    const cookie = getCookie(c,"authorization") as string
+    const jwt = decode(cookie)
+    const {userId} = jwt.payload
+    
+    const {text} = await c.req.json()
+    try {
+    
+    
+        const prisma = new PrismaClient({
+            datasourceUrl:DATABASE_URL
+           }).$extends(withAccelerate())
+        
+     
+    
+         if(typeof text==="string" && typeof userId==="string"){
+    
+            const updatedCommet = await prisma.comments.update({
+                where:{
+                    id_post_id:{
+                        id:commentId,
+                        post_id:postId
+                    }
+                },
+                data:{
+                text,
+                }
+               })
+               if(updatedCommet){
+                return c.json({
+                    msg:"updated your comment successfully",
+                    status:true,
+                    authentication:true,
+                })
+               }else{
+                return c.json({ msg:"Failed to update try after sometime",
+                    status:false,
+                    authentication:true})
+               }
+         }
+    
+         return c.json({
+            msg: "You don't have access to  perform these tasks",
+            authentication: false,
+            status:false
+        },300)
+    
+    } catch (error) {
+        console.log(error)
+        return c.json({
+            msg: "Something went wrong",
+            authentication: true,
+            status:false
+    
+        })
+    }
+    
+    
 
+})
 
 blogRouter.delete("/delete_comment/:postid/:commentid",authMiddleware,async(c)=>{
 const commentId = c.req.param('commentid')
@@ -785,7 +846,7 @@ blogRouter.get("/comments/:postid",async(c)=>{
         datasourceUrl:DATABASE_URL
        }).$extends(withAccelerate())
 
- const commnets = await prisma.comments.findMany({
+ const comments = await prisma.comments.findMany({
     include:{
     user:{
         select:{
@@ -796,10 +857,10 @@ blogRouter.get("/comments/:postid",async(c)=>{
     }
     }
  })
-if(commnets.length>0){
+if(comments.length>0){
     return c.json({
         msg:"founded comments succesfully",
-        data:commnets,
+        data:comments,
         status:true,
         authentication:true,
         

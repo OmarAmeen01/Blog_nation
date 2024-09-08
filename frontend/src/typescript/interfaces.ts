@@ -13,7 +13,11 @@ export  interface User {
   }
   export interface Comments {
     id:string
-    
+    post_id:string,
+    text:string
+    timestamp:string,
+    user:User,
+    user_id:string
 
   }
   export interface Likes{
@@ -52,6 +56,7 @@ interface Content{
   id: string
   images: Image[],
   likes?:Likes[],
+  comments:Comments[]
   user:User,
   user_id: string,
   }
