@@ -793,8 +793,39 @@ const longPoolingTimeout = 1000*60*30
                     if(originalNotiStateCount<newNotificationCount){
                         clearInterval(notiInterval)
                         clearTimeout(notitimeout)
-                        const newNotification =  await prisma.notification.count({
-                            where: {user_id:userId}
+                        const newNotification =  await prisma.notification.findMany({
+                            where: {user_id:userId},
+                            include:{
+                                post:{
+                                   select:{
+                                    content:{
+                                        select:{
+                                            blocks:true
+                                        }
+                                    }
+                                   }
+                                },
+                                 likes:{
+                                   select:{
+                                    id:true
+                                   }
+                                 },
+                                 comments:{
+                                   select:{
+                                    id:true,
+                                    text:true
+                                   }
+                                 },
+                                
+                                 user:{
+                                    select:{
+                                        id:true,
+                                        first_name:true,
+                                        last_name:true,
+                                        image:true
+                                    }
+                                }
+                               }
                         })
                         return c.json({
                             msg:"New notifications arrived",
