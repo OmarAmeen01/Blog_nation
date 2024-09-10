@@ -3,7 +3,7 @@ import { authMiddleware } from "../../middlewares/authmiddleware";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { PrismaClient } from "@prisma/client/edge";
 import {setCookie, getCookie, deleteCookie } from "hono/cookie";
-import { signin_out, validateProfileDetails, validateChangePassword } from "mediumvalidate";
+import { signin_out, validateProfileDetails, validateChangePassword,validateNotification } from "mediumvalidate";
 import { sign, decode, } from "hono/jwt";
 import { cors } from "hono/cors";
 
@@ -119,7 +119,7 @@ userRouter.post("/signup", async (c) => {
                     }
                 })
        if(usercreated){
-                  const settings = await prisma.notification.create({
+                  const settings = await prisma.settings.create({
                     data:{user_id:usercreated.id,
                         comments:true,
                         likes:true,
@@ -661,7 +661,7 @@ userRouter.get('/notification_settings',authMiddleware,async(c)=>{
         }).$extends(withAccelerate())
 
       if(typeof userId === 'string'){
-        const settings = await prisma.notification.findFirst({
+        const settings = await prisma.settings.findFirst({
             where:{user_id:userId},
             select:{
                 id:true,
@@ -712,7 +712,7 @@ userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
         }).$extends(withAccelerate())
 
        if(typeof userId==="string"){
-        const settings =await prisma.notification.update({
+        const settings =await prisma.settings.update({
             where:{id_user_id:{
                 id:id,
                 user_id:userId
@@ -747,3 +747,44 @@ userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
 })
 
 
+userRouter.put('/notifications',authMiddleware,async(c)=>{
+    const body = await c.req.json()
+ const validate = validateNotification.safeParse(Body)
+ if(validate.success){
+
+
+   try {
+    const prisma = new PrismaClient({
+        datasourceUrl: DATABASE_URL
+    }).$extends(withAccelerate())
+   
+    const notification =await prisma.notification.create({
+        data:body
+    })
+    if(notification){
+        return c.json({
+            msg:"Notification saved to database",
+            status:true,
+        })
+        
+    }else{
+        return c.json({
+            msg:"couldn't proccess your request",
+            status:false
+        })
+    }
+   } catch (error) {
+    return c.json({
+        msg:"something went wrong",
+        status:false
+    })
+   }
+    }else{
+        return c.json({
+            msg:"Incorrect format",
+            status:false,
+        })
+    }
+
+}
+)
