@@ -34,35 +34,6 @@ userRouter.use('*', cors({
 type data = { [key: string]: string | Uint8ClampedArray }  // used to used dynamic properties to data object on populating it using populatedata
 
 
-//functions
-
-// const fields = ["first_name", "last_name", "email","about","domain", "pronoun", "image"]
-
-// function objectFromInput(email: string, password: string): { email: string, password: string } {
-//     const user = {
-//         email,
-//         password,
-//     }
-//     return user
-// }
-// function objectFromPasswords(old_password: string, new_password: string): { old_password: string, new_password: string } {
-//     const passwordObject = {
-//         old_password,
-//         new_password,
-//     }
-//     return passwordObject
-// }
-// function populateData(formData: FormData) {
-//     const data: data = {}
-//     for (let field of fields) {
-//         const value = formData.get(field)
-//         if (typeof value === "string") {
-//             data[field] = value
-
-//         }
-//     }
-//     return data
-// }
 
 async function hashPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();
@@ -751,17 +722,18 @@ userRouter.put('/notifications',authMiddleware,async(c)=>{
     const body = await c.req.json()
  const validate = validateNotification.safeParse(Body)
  if(validate.success){
-
+ 
 
    try {
     const prisma = new PrismaClient({
         datasourceUrl: DATABASE_URL
     }).$extends(withAccelerate())
-   
+
     const notification =await prisma.notification.create({
         data:body
     })
     if(notification){
+       
         return c.json({
             msg:"Notification saved to database",
             status:true,
@@ -774,11 +746,14 @@ userRouter.put('/notifications',authMiddleware,async(c)=>{
         })
     }
    } catch (error) {
+    console.log(error)
     return c.json({
+        
         msg:"something went wrong",
         status:false
     })
    }
+
     }else{
         return c.json({
             msg:"Incorrect format",
@@ -788,3 +763,67 @@ userRouter.put('/notifications',authMiddleware,async(c)=>{
 
 }
 )
+
+// long pooling implementation take notes here
+
+userRouter.get("/notification",authMiddleware,async(c)=>{
+    const cookie = getCookie(c,"authorization")
+    if(cookie){
+       const jwtToken = decode(cookie) 
+       const {userId} = jwtToken.payload
+ 
+        try {
+            const prisma = new PrismaClient({
+                datasourceUrl: DATABASE_URL
+            }).$extends(withAccelerate())
+         
+            
+            if(typeof userId ==="string"){
+             
+            const originalNotiStateCount= await prisma.notification.count({
+                where: {user_id:userId}
+            })
+          
+const longPoolingTimeout = 1000*60*30
+
+                const notiInterval = setInterval(async()=>{
+                    const newNotificationCount =  await prisma.notification.count({
+                        where: {user_id:userId}
+                    })
+                    if(originalNotiStateCount<newNotificationCount){
+                        clearInterval(notiInterval)
+                        clearTimeout(notitimeout)
+                        const newNotification =  await prisma.notification.count({
+                            where: {user_id:userId}
+                        })
+                        return c.json({
+                            msg:"New notifications arrived",
+                            data:newNotification,
+                            status:true,
+                        })
+                    }
+                },1000*60)
+            const notitimeout= setTimeout(()=>{
+            clearInterval(notiInterval)
+            return c.json({
+                msg:"Long pooling time out",
+                status:false
+            })
+             },longPoolingTimeout)
+            
+    
+         }
+        } catch (error) {
+            return c.json({
+                msg:"Something went wrong",
+                status:false
+            })
+        }
+    }else{
+        return c.json({
+            msg: "No authorization cookie",
+            status: false,
+          });
+    }
+
+})
