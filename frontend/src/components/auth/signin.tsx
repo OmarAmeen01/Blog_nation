@@ -90,11 +90,11 @@ export default function Signin() {
 
 
 
-    return (isFormVisible && isSigninClicked)&&<><div className="fixed   bg-[rgba(0,0,0,0.4)] -top-14 left-0 z-10 w-[104.6vw] h-[122vh]" onClick={()=>{
+    return (isFormVisible && isSigninClicked)&&<><div className="fixed   bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[100%] h-[100%]" onClick={()=>{
          dispatch(setIsSigninClicked(!isSigninClicked))
         dispatch(setIsFormVisible(!setIsFormVisible)) }}>    </div>
     
-<div className="absolute  z-30 top-[50%] left-[45%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4 rounded-lg shadow-xl mt-24 mb-24">
+<div className="fixed  z-30 top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4  mt-24 mb-24">
        {isSignupClicked?<Signup/>:<form className="bg-white px-6 py-2 rounded-lg shadow-lg   relative overflow-hidden " onSubmit={handleSubmit}>
      {sendingResponse&& <div id="form-loading" className="absolute top-0" ></div>}
        <h2 className="font-bold text-2xl p-2 text-center">Sign in to your account</h2>

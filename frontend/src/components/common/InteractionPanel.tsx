@@ -7,6 +7,7 @@ import whatsapp from "../../assets/whatsapp-svgrepo-com.svg"
 import facebook from "../../assets/facebook-color-svgrepo-com.svg"
 import copy from "../../assets/copy-svgrepo-com.svg"
 import tick from "../../assets/file-tick-svgrepo-com.svg"
+import { Comments } from "../../typescript/interfaces"
 import twitter from "../../assets/twitter-color-svgrepo-com.svg"
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -15,12 +16,13 @@ import { Store } from "../../typescript/interfaces"
 import { useSelector,useDispatch } from "react-redux"
 import hasUserLiked from "../../helper/hasUserLiked"
 import { setIsFormVisible, setIsSigninClicked } from "../../store/authSlice"
-import CommentComponet from "./comments"
+import CommentComponet from "./comment/comments"
 
 
 
 
 export default function ({ postId }: { postId: string }) {
+   console.log(postId)
    const ShareLinks =[
       {     name:"linkedin",
            link:`https://www.linkedin.com/shareArticle?mini=true&url=https://yourwebsite.com&title=This%20post%20was%20created%20using%20my%20own%20website!&summary=Check%20it%20out%20here&source=http://localhost:5173` ,
@@ -40,8 +42,12 @@ export default function ({ postId }: { postId: string }) {
         },
      
      ]
+     const [updateComponent,setUpdateComponent] = useState(false)
+     const [totalComments,setTotalComments] = useState<number>()
    const [isCommentClicked, setisCommentClicked] = useState(false)
    const [isShareClicked, setisShareClicked] = useState(false)
+  const [comments, setComments] = useState<Comments[]>([])
+
    const [isLikeClicked,setIsLikeClicked] = useState(false)
    const [likeCount,setLikeCount] = useState<number>()
   const [isTextCopied,setTextCopied]= useState(false)
@@ -65,11 +71,25 @@ export default function ({ postId }: { postId: string }) {
 
   },[isLikeClicked])
 
-   async function HandleLikeClick() {
+  useEffect(() => {
+
+   axios.get(`${blogUrl}/comments/${postId}`, { withCredentials: true }).then(res => {
+     if (res.data.status) {
+       setComments(res.data.data)
+       setTotalComments(res.data.data.length)
+     }
+   }).catch(error => {
+     console.log(error)
+   })
+ }, [updateComponent])
+
+
+
+ function HandleLikeClick() {
 
   if(!loginStatus){
    dispatch(setIsFormVisible(!formVisible))
-   dispatch(setIsSigninClicked(!signinVisible))
+   dispatch(dispatch(setIsSigninClicked(!signinVisible)))
   }else{
    const newLikeState = !isLikeClicked
    setIsLikeClicked(newLikeState)
@@ -100,7 +120,17 @@ export default function ({ postId }: { postId: string }) {
 
 
    function handleCommentClick(){
-      setisCommentClicked(prev=>!prev)
+ if(!loginStatus){
+ dispatch(   setIsFormVisible(!formVisible))
+   dispatch(setIsSigninClicked(!signinVisible))
+
+ }else{
+   setisCommentClicked(prev=>!prev)
+ }
+   }
+  
+   function handleComponentUpdate(){
+      setUpdateComponent(prev=>!prev)
    }
 
    return <div className="flex gap-3 p-2">
@@ -109,10 +139,10 @@ export default function ({ postId }: { postId: string }) {
          <img className="h-6 w-6 " src={isLikeClicked ? unlike : like} title="Like" alt="" />
          <p id="like" className="text-gray-500">{likeCount}</p>
       </button>
-      <CommentComponet isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>
+     {isCommentClicked&& <CommentComponet comments={comments} postId={postId} updateComponent={handleComponentUpdate} isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>}
       <button className="hover:opacity-60 flex gap-1 " onClick={handleCommentClick}>
          <img src={commet} className="h-6 w-6 hover:opacity-60" alt="" title="Comment" />
-         <p id="like" className="text-gray-500">1</p>
+         <p id="like" className="text-gray-500">{totalComments}</p>
       </button>
     
           {isShareClicked&&

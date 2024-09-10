@@ -4,7 +4,8 @@
 
 @layer components{
   .mdStyle{
-    @apply 
+    @apply  left-[60%] px-8 h-full top-0  w-[40%]
+
   }
   
 }

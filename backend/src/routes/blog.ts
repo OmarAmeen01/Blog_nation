@@ -677,9 +677,9 @@ try {
 
 
 })
-blogRouter.put("edit_comment/:postid/:commentid",authMiddleware,async(c)=>{
+blogRouter.put("edit_comment/:postid/:comentid",authMiddleware,async(c)=>{
     const postId = c.req.param('postid')
-    const commentId = c.req.param('coommentid')
+    const commentId = c.req.param('comentid')
     const cookie = getCookie(c,"authorization") as string
     const jwt = decode(cookie)
     const {userId} = jwt.payload
@@ -847,6 +847,7 @@ blogRouter.get("/comments/:postid",async(c)=>{
        }).$extends(withAccelerate())
 
  const comments = await prisma.comments.findMany({
+    where:{post_id:postId},
     include:{
     user:{
         select:{
@@ -855,6 +856,9 @@ blogRouter.get("/comments/:postid",async(c)=>{
             image:true
         }
     }
+    },
+    orderBy:{
+        timestamp:"desc"
     }
  })
 if(comments.length>0){

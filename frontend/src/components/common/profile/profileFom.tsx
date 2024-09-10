@@ -58,11 +58,12 @@ function handleSubmit(e:React.FormEvent){
 
 return (
     shouldShow&&<>
-    <div id="overlay " className="fixed   bg-[rgba(0,0,0,0.4)] -top-14 left-0 z-10 w-[104.6vw] h-[122vh]" onClick={handleToggle}></div>
-     <form   className="absolute bg-white  z-20 top-[50%] left-[45%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4 rounded-lg shadow-xl mt-24 mb-24 ">
+    <div id="overlay " className="fixed   bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[100%] h-[100%]  " onClick={handleToggle}></div>
+     <form   className="fixed bg-white  z-20 top-[35%] left-[45%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4 rounded-lg shadow-xl mt-24 mb-24  overflow-y-scroll h-[95%]">
        <h4 className="border-b-4  text-lg p-3
          font-semibold md:text-xl">Edit Profile</h4>
-       <InputComponet id="First Name"type="text" placeholder="First Name.." value={profileInfo.first_name}
+      
+      <InputComponet id="First Name"type="text" placeholder="First Name.." className="w-full" value={profileInfo.first_name}
         name="first_name"
        onChange={(e)=>setProfileInfo(prev=>({
 
@@ -71,7 +72,8 @@ return (
     
         first_name:e.target.value
        }))} label="First Name"/>
-      <InputComponet id="Last Name"type="text" placeholder="Last Name.." value={profileInfo.last_name}
+      <InputComponet id="Last Name"
+      className="w-full" type="text" placeholder="Last Name.." value={profileInfo.last_name}
         name="last_name"
        onChange={(e)=>setProfileInfo(prev=>({
 
@@ -80,7 +82,9 @@ return (
     
         _name:e.target.value
        }))} label="Last Name"/>
-       <InputComponet id="Domain"type="text" placeholder="www.omarameen.co.." value={profileInfo.domain}
+  
+
+     <InputComponet id="Domain"type="text" placeholder="www.omarameen.co.." value={profileInfo.domain}
         name="domain"
        onChange={(e)=>setProfileInfo(prev=>({
 
@@ -98,7 +102,9 @@ return (
     
         domain_title:e.target.value
        }))} label="Domain Title"/>
-       <InputComponet id="Image"type="text" placeholder="https://Image url.." value={profileInfo.image}
+
+
+      <InputComponet id="Image"type="text" placeholder="https://Image url.." value={profileInfo.image}
         name="image" maxLength={1000}
        onChange={(e)=>setProfileInfo(prev=>({
 
@@ -118,9 +124,8 @@ return (
         ...prev,
     
         cover_image:e.target.value
-      }))} label="Cover Image" />
-     
-     <div className="flex flex-col">
+      }))} label="Cover Image" />    
+     <div className="flex flex-col ">
      <label htmlFor="about" className="font-semibold text-sm p-1 md:text-lg ">About
      </label>
       <textarea value={profileInfo.about} minLength={50} onChange={(e)=>setProfileInfo(prev=>({
