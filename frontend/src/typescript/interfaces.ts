@@ -44,7 +44,8 @@ export interface InputData{
   post_id:string
 }
 
-interface Content{
+
+export interface Content{
   id:string,
   post_id:string,
   blocks:Block[]
@@ -68,8 +69,25 @@ export interface Noti{
     likes:boolean,
     shares:boolean,
     comments:boolean,
-    post_uploads:boolean
+    post_uploads:boolean,
+    notifications:Notification[]
 
+}
+export interface Notification{
+  type:string,
+  comment_id:string,
+  user_id:string,
+  like_id:string,
+  post_id:string,
+  comments:Comments,
+  timestamp:string,
+  user:User,
+  likes:{
+    id:string
+  },
+  post:{
+    content:Block[]
+  }
 }
 export interface ProfileDetails{
   id:string

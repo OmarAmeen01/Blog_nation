@@ -17,7 +17,7 @@ import { useSelector,useDispatch } from "react-redux"
 import hasUserLiked from "../../helper/hasUserLiked"
 import { setIsFormVisible, setIsSigninClicked } from "../../store/authSlice"
 import CommentComponet from "./comment/comments"
-
+import { validateNotification } from "mediumvalidate"
 
 
 
@@ -51,6 +51,15 @@ export default function ({ postId }: { postId: string }) {
    const [isLikeClicked,setIsLikeClicked] = useState(false)
    const [likeCount,setLikeCount] = useState<number>()
   const [isTextCopied,setTextCopied]= useState(false)
+  const [isReponseSend,setResponseSend] = useState(false)
+  const userApiUrl = import.meta.env.VITE_USER_API_URL
+  const [notification,setNotification] = useState<validateNotification>({
+   
+   user_id:"",
+ type:"",
+ like_id:""
+ })
+
    const blogUrl = import.meta.env.VITE_POST_API_URL
    const userDetails = useSelector<Store>(state=>state.auth.userData)
    const loginStatus = useSelector<Store>(state=>state.auth.status) as boolean
@@ -84,7 +93,6 @@ export default function ({ postId }: { postId: string }) {
  }, [updateComponent])
 
 
-
  function HandleLikeClick() {
 
   if(!loginStatus){
@@ -97,10 +105,18 @@ export default function ({ postId }: { postId: string }) {
           axios.post(`${blogUrl}/like/${postId}`, {}, {
              withCredentials: true
           }).then(res => {
-             console.log(res)
+            
              if (res.data.status) {
+               const data =res.data.data
+               setNotification(prev=>({
+                  ...prev,
+                  type:"like",
+                  user_id:data.user_id,
+                  like_id:data.id
+                }))
                setIsLikeClicked(res.data.status)
-
+             
+          setResponseSend(true)
              }
           }).catch(error => {
              console.log(error)
@@ -118,7 +134,11 @@ export default function ({ postId }: { postId: string }) {
   }
    }
 
-
+useEffect(()=>{
+   isReponseSend&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+      console.log(res)
+    })
+},[isReponseSend])
    function handleCommentClick(){
  if(!loginStatus){
  dispatch(   setIsFormVisible(!formVisible))

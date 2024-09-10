@@ -5,7 +5,8 @@ const initialState = {
     likes:true,
     shares:true,
     comments:true,
-    post_uploads:true
+    post_uploads:true,
+    notifications:[]
 }
 
 export const  notiReducer = createSlice({
@@ -15,9 +16,12 @@ export const  notiReducer = createSlice({
         setNotiStates :(state,action)=>({
             ...state,
             [action.payload[0]]:action.payload[1]
-        })
+        }),
+        setNotifications:(state,action)=>{
+            state.notifications=action.payload
+        }
     }
 })
 
-export const {setNotiStates} = notiReducer.actions
+export const {setNotiStates,setNotifications} = notiReducer.actions
 export default notiReducer.reducer

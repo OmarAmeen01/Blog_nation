@@ -152,7 +152,7 @@ export declare const validateNotification: z.ZodObject<{
     post_id?: string | undefined;
     comment_id?: string | undefined;
 }>;
-export type validateNotification = z.infer<typeof validatePost>;
+export type validateNotification = z.infer<typeof validateNotification>;
 export type validatePost = z.infer<typeof validatePost>;
 export type validateChangePassword = z.infer<typeof validateChangePassword>;
 export type validateProfileDetails = z.infer<typeof validateProfileDetails>;

@@ -1,11 +1,13 @@
 import InputComponet from "../inputComponet"
-import { useEffect, useRef, useState } from "react"
+import {  useEffect, useState } from "react"
 import { Store, User, Comments } from "../../../typescript/interfaces"
 import { useSelector } from "react-redux"
 import Button from "../button"
 import axios from "axios"
 import profile from "../../../assets/profile.png"
 import Comment from "./comment"
+import { validateNotification } from "mediumvalidate"
+import { useAsyncError } from "react-router-dom"
 
  type CommentComponet={
   isCommentClicked:boolean,
@@ -18,18 +20,31 @@ import Comment from "./comment"
 export default function CommentComponet({isCommentClicked,handleToggle , postId ,updateComponent,comments}:CommentComponet) {
 
 
-
+const [notification,setNotification] = useState<validateNotification>({
+  user_id:"",
+type:"",
+comment_id:""
+})
   const [text, setText] = useState("")
+  const [sentresponse,setsentResponse] = useState(false)
   const userDetails = useSelector<Store>(state => state.auth.userData) as User
   const blogUrl = import.meta.env.VITE_POST_API_URL
-
-
+ const userApiUrl = import.meta.env.VITE_USER_API_URL
   function handleSubmit() {
   axios.post(`${blogUrl}/comment/${postId}`,{text:text},{withCredentials:true}).then(res=>{
     if(res.data.status){
+    const data = res.data.data
+    console.log(data)
       setText("")   
     updateComponent()
-    
+    setNotification(prev=>({
+      ...prev,
+      type:"comment",
+      user_id:data.user_id,
+      comment_id:data.id
+    }))
+
+  setsentResponse(prev=>!prev)
     }
   })
 
@@ -39,6 +54,11 @@ export default function CommentComponet({isCommentClicked,handleToggle , postId 
 updateComponent()
   }
 
+  useEffect(()=>{
+    sentresponse&&  axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+      console.log(res)
+    })
+  },[sentresponse])
   return<>
   
   <div id="overlay " className={`fixed ${isCommentClicked?"block":" opacity-0 hidden"}  bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[100%] h-[100%]`}onClick={handleToggle}></div>

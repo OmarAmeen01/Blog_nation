@@ -45,7 +45,7 @@ export const validateNotification = z.object({
     comment_id:z.string().optional(),
 })
 
-export type validateNotification = z.infer<typeof validatePost>
+export type validateNotification = z.infer<typeof validateNotification>
 export type validatePost= z.infer<typeof validatePost>
 export type validateChangePassword= z.infer<typeof validateChangePassword>
 export type validateProfileDetails = z.infer<typeof validateProfileDetails>

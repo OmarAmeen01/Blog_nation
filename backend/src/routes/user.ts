@@ -718,9 +718,10 @@ userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
 })
 
 
-userRouter.put('/notifications',authMiddleware,async(c)=>{
+userRouter.post('/notification',authMiddleware,async(c)=>{
     const body = await c.req.json()
- const validate = validateNotification.safeParse(Body)
+    console.log(body)
+ const validate = validateNotification.safeParse(body)
  if(validate.success){
  
 
@@ -755,6 +756,8 @@ userRouter.put('/notifications',authMiddleware,async(c)=>{
    }
 
     }else{
+        console.log(validate.data)
+        console.log(validate.error.errors[0].message)
         return c.json({
             msg:"Incorrect format",
             status:false,
@@ -766,7 +769,7 @@ userRouter.put('/notifications',authMiddleware,async(c)=>{
 
 // long pooling implementation take notes here
 
-userRouter.get("/notification",authMiddleware,async(c)=>{
+userRouter.get('/notifications',authMiddleware,async(c)=>{
     const cookie = getCookie(c,"authorization")
     if(cookie){
        const jwtToken = decode(cookie) 
@@ -780,20 +783,7 @@ userRouter.get("/notification",authMiddleware,async(c)=>{
             
             if(typeof userId ==="string"){
              
-            const originalNotiStateCount= await prisma.notification.count({
-                where: {user_id:userId}
-            })
-          
-const longPoolingTimeout = 1000*60*30
-
-                const notiInterval = setInterval(async()=>{
-                    const newNotificationCount =  await prisma.notification.count({
-                        where: {user_id:userId}
-                    })
-                    if(originalNotiStateCount<newNotificationCount){
-                        clearInterval(notiInterval)
-                        clearTimeout(notitimeout)
-                        const newNotification =  await prisma.notification.findMany({
+        const notification =  await prisma.notification.findMany({
                             where: {user_id:userId},
                             include:{
                                 post:{
@@ -827,23 +817,21 @@ const longPoolingTimeout = 1000*60*30
                                 }
                                }
                         })
+                      
+                        if(notification){
+                            
+                            return c.json({
+                                msg:"New notifications arrived",
+                                data:notification,
+                                status:true,
+                            })
+                        }
+                    }else{
                         return c.json({
-                            msg:"New notifications arrived",
-                            data:newNotification,
-                            status:true,
+                            msg:"tyy again",
+                            status:false
                         })
                     }
-                },1000*60)
-            const notitimeout= setTimeout(()=>{
-            clearInterval(notiInterval)
-            return c.json({
-                msg:"Long pooling time out",
-                status:false
-            })
-             },longPoolingTimeout)
-            
-    
-         }
         } catch (error) {
             return c.json({
                 msg:"Something went wrong",

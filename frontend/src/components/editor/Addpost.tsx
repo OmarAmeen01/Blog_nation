@@ -5,6 +5,7 @@ import axios from 'axios';
 import Button from '../common/button';
 import InputComponet from '../common/inputComponet';
 import { useNavigate } from 'react-router-dom';
+import { validateNotification } from 'mediumvalidate';
 // always initialise in useEffect hook
  
 
@@ -15,7 +16,14 @@ export default function AddPost(){
   const [content,setContent] = useState<OutputData>()
   const [isPostClicked,setIsPostClicked] = useState(false)
   const [category,setCategory] = useState("")
-
+  const [isReponseSend,setResponseSend] = useState(false)
+  const userApiUrl = import.meta.env.VITE_USER_API_URL
+  const [notification,setNotification] = useState<validateNotification>({
+   
+   user_id:"",
+ type:"",
+ post_id:""
+ })
   const navigate = useNavigate()
 
 let editorReff= useRef<EditorJS|null|boolean>(null)
@@ -70,9 +78,19 @@ useEffect(()=>{
      try {
       const  response= await axios.post(`${BlogApiUrl}/addpost`,postDetails,{withCredentials:true})
     if(response.data.status){
+     const data= response.data.data
+     console.log(data)
+      setNotification(prev=>({
+        ...prev,
+        type:"post",
+        user_id:data.user_id,
+        post_id:data.id
+      }))
+      setResponseSend(true)
       setSendingResponse(false)
-      handleVisibility(),
-      navigate("/dashboard")
+      handleVisibility()
+      
+
     }
       
      } catch (error) {
@@ -88,7 +106,12 @@ useEffect(()=>{
 
     }
   
-   
+    useEffect(()=>{
+      isReponseSend&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+         console.log(res)
+         navigate("/dashboard")
+       })
+   },[isReponseSend])
 
 
 

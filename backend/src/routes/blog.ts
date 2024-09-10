@@ -280,6 +280,7 @@ blogRouter.post("/addpost",authMiddleware,async(c)=>{
            }).$extends(withAccelerate())
 
 if(typeof userId==="string"){
+
     const post = await prisma.post.create({
         data:{
             user_id:userId,
@@ -288,18 +289,46 @@ if(typeof userId==="string"){
     })
 
     if(post){
-   
+       const posts =await prisma.post.findMany({
+       where:{user_id:userId},
+       include:{
+        content:true,
+         user:{
+            select:{
+                id:true
+               
+
+       }
+    }
+}
+    })
        const content=await prisma.content.create({
                 data:{
                     post_id:post.id,
                     blocks:body.content.blocks
-                }
+                },
             })
         
      
         if(content){
+            const postData =await prisma.post.findFirst({
+                where:{user_id:userId,
+                      id:post.id
+                },
+                include:{
+                 content:true,
+                  user:{
+                     select:{
+                         id:true,
+                        first_name:true
+         
+                }
+             }
+         }
+             })
             return c.json({
                 msg:"Post uploaded succesfully",
+                data:postData,
                 status:true,
             })
         }else{
@@ -481,9 +510,25 @@ blogRouter.post("/like/:postid",authMiddleware,async(c)=>{
         }
       })
       if(likedPost){
+        const likedData = await prisma.likes.findMany({
+            where:{post_id:postId,
+                id:likedPost.id
+            },
+            include:{
+                user:{
+                    select:{
+                        id:true,
+                        last_name:true,
+                        first_name:true,
+                       
+                    }
+                } 
+            }
+           })
         return c.json({
             msg:"liked this post",
             status: true,
+            data:likedData,
             authentication:true
         })
       }else{
@@ -647,9 +692,24 @@ try {
             }
            })
            if(uploadedCommet){
+
+            const commentData = await prisma.comments.findFirst({
+                where:{post_id:postId,
+                    id:uploadedCommet.id
+                },
+                include:{
+                user:{
+                    select:{
+                        id:true,
+                    }
+                }
+                }
+              
+             })
             return c.json({
                 msg:"uploaded your comment successfully",
                 status:true,
+                data:uploadedCommet,
                 authentication:true,
             })
            }else{
