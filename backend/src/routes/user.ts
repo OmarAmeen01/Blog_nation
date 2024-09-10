@@ -745,3 +745,5 @@ userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
 
     }
 })
+
+

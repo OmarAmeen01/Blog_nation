@@ -44,20 +44,84 @@ export declare const validateProfileDetails: z.ZodObject<{
     domain_title?: string | undefined;
 }>;
 export declare const validatePost: z.ZodObject<{
-    title: z.ZodOptional<z.ZodString>;
-    description: z.ZodOptional<z.ZodString>;
-    image: z.ZodOptional<z.ZodString>;
-    category: z.ZodOptional<z.ZodString>;
+    categort: z.ZodOptional<z.ZodString>;
+    content: z.ZodObject<{
+        blocks: z.ZodArray<z.ZodObject<{
+            data: z.ZodObject<{
+                text: z.ZodString;
+                level: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                text: string;
+                level: number;
+            }, {
+                text: string;
+                level: number;
+            }>;
+            id: z.ZodString;
+            type: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }, {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }>, "many">;
+        time: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        blocks: {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }[];
+        time: number;
+    }, {
+        blocks: {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }[];
+        time: number;
+    }>;
 }, "strip", z.ZodTypeAny, {
-    image?: string | undefined;
-    title?: string | undefined;
-    description?: string | undefined;
-    category?: string | undefined;
+    content: {
+        blocks: {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }[];
+        time: number;
+    };
+    categort?: string | undefined;
 }, {
-    image?: string | undefined;
-    title?: string | undefined;
-    description?: string | undefined;
-    category?: string | undefined;
+    content: {
+        blocks: {
+            type: string;
+            data: {
+                text: string;
+                level: number;
+            };
+            id: string;
+        }[];
+        time: number;
+    };
+    categort?: string | undefined;
 }>;
 export declare const validateChangePassword: z.ZodObject<{
     oldPassword: z.ZodString;
@@ -69,6 +133,26 @@ export declare const validateChangePassword: z.ZodObject<{
     oldPassword: string;
     newPassword: string;
 }>;
+export declare const validateNotification: z.ZodObject<{
+    type: z.ZodString;
+    like_id: z.ZodOptional<z.ZodString>;
+    user_id: z.ZodString;
+    post_id: z.ZodOptional<z.ZodString>;
+    comment_id: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    type: string;
+    user_id: string;
+    like_id?: string | undefined;
+    post_id?: string | undefined;
+    comment_id?: string | undefined;
+}, {
+    type: string;
+    user_id: string;
+    like_id?: string | undefined;
+    post_id?: string | undefined;
+    comment_id?: string | undefined;
+}>;
+export type validateNotification = z.infer<typeof validatePost>;
 export type validatePost = z.infer<typeof validatePost>;
 export type validateChangePassword = z.infer<typeof validateChangePassword>;
 export type validateProfileDetails = z.infer<typeof validateProfileDetails>;

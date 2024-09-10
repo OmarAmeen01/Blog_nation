@@ -31,6 +31,7 @@ model User {
   like Likes[]
   comment Comments[]
   post Post[]
+  settings Settings[]
   notification Notification[]
 }
 
@@ -43,14 +44,16 @@ model Post {
   images Images[] 
   likes Likes[]
   comments Comments[]
+  notification Notification[]
   user User @relation(fields: [user_id],references: [id],onDelete: Cascade,onUpdate:Cascade)
 }
 
 model Likes{
-  id String  @default(uuid())
+  id String  @default(uuid()) @unique
   user_id String 
   post_id String
   user User @relation(fields: [user_id],references: [id], onDelete: Cascade, onUpdate: Cascade) 
+  notification Notification[]
   post Post  @relation(fields: [post_id],references: [id],onDelete: Cascade, onUpdate: Cascade)
   @@id([user_id,post_id]) 
 }
@@ -64,7 +67,7 @@ model Content{
 }
 
 model Comments {
-  id String @default(uuid())
+  id String @default(uuid()) @unique
   user_id String
   post_id String
   timestamp DateTime @default(now())
@@ -72,17 +75,18 @@ model Comments {
   user User @relation(fields: [user_id],references: [id],onDelete:Cascade, onUpdate: Cascade)
   post Post @relation(fields:[post_id],references: [id],onDelete: Cascade, onUpdate: Cascade)
   @@id([id,post_id])
+  notification Notification[]
 }
 
 model Images {
-  id String @default(uuid())
+  id String @default(uuid()) 
   image String?
   post_id String  
   post Post @relation(fields: [post_id],references: [id],onDelete:Cascade, onUpdate: Cascade)
   @@id([id,post_id])
 }
 
-model Notification{
+model Settings{
   id String @default(uuid())
   user_id String     
   comments Boolean?
@@ -91,4 +95,19 @@ model Notification{
   shares Boolean?
   users User @relation(fields: [user_id],references: [id],onDelete:Cascade,onUpdate:Cascade)
   @@id([id,user_id])
+}
+
+model Notification{
+id String  @default(uuid())
+type String
+timestamp DateTime @default(now())
+like_id String?
+likes Likes? @relation(fields: [like_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+user_id String
+user User @relation(fields: [user_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+post_id String?
+post Post? @relation(fields: [post_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+comment_id String?
+comments Comments? @relation(fields: [comment_id],references: [id], onDelete:Cascade,onUpdate: Cascade)
+@@id([id,user_id])
 }

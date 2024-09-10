@@ -37,7 +37,15 @@ export const validateChangePassword= z.object({
     oldPassword:z.string().min(8),
     newPassword:z.string().min(8)
 })
+export const validateNotification = z.object({
+    type:z.string(),
+    like_id:z.string().optional(),
+    user_id:z.string(),
+    post_id:z.string().optional(),
+    comment_id:z.string().optional(),
+})
 
+export type validateNotification = z.infer<typeof validatePost>
 export type validatePost= z.infer<typeof validatePost>
 export type validateChangePassword= z.infer<typeof validateChangePassword>
 export type validateProfileDetails = z.infer<typeof validateProfileDetails>
