@@ -1,41 +1,56 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import Bell from  "../../assets/bell.svg"
 import Profile  from "../../assets/profile.png"
 import formatDate from "../../helper/dateConverter"
-import { Notification } from "../../typescript/interfaces"
+import { Noti, Notification } from "../../typescript/interfaces"
 import { Store } from "../../typescript/interfaces"
+import { Link } from "react-router-dom"
 import { useSelector} from "react-redux"
+import notificationFilter from "../../helper/notificationFilter"
+
+
 export default function NotificationCenter(){
   const [bellClicked,setBellClicked] = useState(false)
-const [notifications,setNotifications] = useState<Notification[]>()
+const [notifications,setNotifications] = useState<Notification[]>([])
 const  notificationsState = useSelector<Store>(state=>state.noti.notifications) as Notification[]
+const notificationSettings = useSelector<Store>(state=>state.noti.notificationSettings) as Obj
+
+type Obj ={[key:string]:boolean}
 useEffect(()=>{
-    setNotifications(notificationsState)
-    console.log(notificationsState)
-},[notificationsState])
+    setNotifications(notificationFilter(notificationSettings,notificationsState))
+   },[notificationsState])
+   console.log(notifications,"notifications")
 
-
+function handleVisibility(){
+   setBellClicked(prev=>!prev)
+}
 
     return <div className="py-2 pr-4 ">
-         <button onClick={()=>{
-            setBellClicked(prev=>!prev)
-         }} className="flex relative">  
+         <button onClick={handleVisibility} className="flex relative">  
             <img src={Bell} className=" hover:scale-125 transition-all duration-200 " alt="" />
-           {!bellClicked&& <p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold ">{notifications?.length} <span>+</span></p>}
+           {!bellClicked&& (notifications.length>9? <p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold "> {notifications?.length-1}  <span>+</span></p>:<p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold ">{notifications.length}</p>)}
             </button>
     {bellClicked&&
     
     <div id="notifications" className="absolute bg-white right-4 z-20 p-4 shadow-xl rounded-lg my-4">
      
-       {notifications?.map(notification=>{
-         return  <div className="flex gap-5 p-4 border-b-2  justify-between">
+       {notifications.length===0?<div><p className="text-xl text-center font-semibold text-gray-400  p-4 ">
+          It looks empty here 
+         </p></div>:notifications.map(notification=>{
+         return <div>
+
+     
+         <Link to={`/post/${notification.post_id}`} >
+            <div className="flex gap-5 p-4 border-b-2  justify-between">
          <div id="user" className="flex gap-4">
          <img src={Profile} className="rounded-full  h-9 w-9 hover:contrast-50" alt="profile" />
-         <p className="text-lg p-2"><span className="font-semibold">{notification.user.first_name}</span> {notification.type}ed your post</p>
+         <p className="text-lg p-2"><span className="font-semibold">{notification.user.first_name}</span> {notification.msg}</p>
          </div>
          <p className="text-sm text-gray-500 p-2 ">{formatDate(notification.timestamp).formattedDate}</p>
       </div>
+         </Link>
+         <div id="overlay " className="absolute border-2 border-black top-0 -left-[60rem] -z-10 w-[400%] h-[105vh]" onClick={handleVisibility}></div>
+         </div>
        })}
         
     </div> }

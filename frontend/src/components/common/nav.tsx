@@ -14,12 +14,8 @@ import NotificationCenter from "./NotificationCenter"
 const navLinks = [
     {
         path: "/our_story",
-        name: "Our story"
+        name: "Explore Features"
     },
-    {
-        path: "/membership",
-        name: "Membership"
-    }
 ]
 
 // functions 
@@ -34,8 +30,12 @@ export default function Nav({ className }: { className?: string }) {
     const [isProfileClicked, setIsProfileClicked] = useState(false)
     const dispatch = useDispatch()
     function handleClick() {
+       if(!window.navigator.onLine){
+        alert("Your are offline connect and Refresh")
+       }else{
         dispatch(setIsSignupClicked(!isSignupClicked))
         dispatch(setIsFormVisible(!isFormVisible))
+       }
     }
 
 
@@ -50,7 +50,7 @@ export default function Nav({ className }: { className?: string }) {
                 <div className="flex  ">
                     <div className={` gap-6 text-sm hidden lg:flex border-black py-4 px-4  ${className} `}>
                         {navLinks.map(link => {
-                            return <Link to={link.path} className=" font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
+                            return <Link to={link.path} className="  font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
 
 
                         })}

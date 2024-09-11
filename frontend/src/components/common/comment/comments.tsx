@@ -7,23 +7,26 @@ import axios from "axios"
 import profile from "../../../assets/profile.png"
 import Comment from "./comment"
 import { validateNotification } from "mediumvalidate"
-import { useAsyncError } from "react-router-dom"
 
  type CommentComponet={
   isCommentClicked:boolean,
   handleToggle:()=>void,
    postId:string, 
    updateComponent:()=>void,
-   comments:Comments[]
+   comments:Comments[],
+   ownerId:string,
  }
 
-export default function CommentComponet({isCommentClicked,handleToggle , postId ,updateComponent,comments}:CommentComponet) {
+export default function CommentComponet({isCommentClicked,handleToggle , postId ,updateComponent,comments,ownerId}:CommentComponet) {
 
 
 const [notification,setNotification] = useState<validateNotification>({
   user_id:"",
 type:"",
-comment_id:""
+comment_id:"",
+owner_id:"",
+post_id:postId,
+msg:""
 })
   const [text, setText] = useState("")
   const [sentresponse,setsentResponse] = useState(false)
@@ -34,16 +37,18 @@ comment_id:""
   axios.post(`${blogUrl}/comment/${postId}`,{text:text},{withCredentials:true}).then(res=>{
     if(res.data.status){
     const data = res.data.data
-    console.log(data)
-      setText("")   
     updateComponent()
     setNotification(prev=>({
       ...prev,
-      type:"comment",
+      type:"comments",
       user_id:data.user_id,
-      comment_id:data.id
+      comment_id:data.id,
+      owner_id:ownerId,
+      post_id:postId,
+      msg:`Commented ${text.slice(0,20)}... on your post`
     }))
-
+    
+    setText("")   
   setsentResponse(prev=>!prev)
     }
   })
@@ -55,7 +60,8 @@ updateComponent()
   }
 
   useEffect(()=>{
-    sentresponse&&  axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+    console.log(notification)
+   sentresponse&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
       console.log(res)
     })
   },[sentresponse])

@@ -43,6 +43,8 @@ exports.validateNotification = zod_1.default.object({
     type: zod_1.default.string(),
     like_id: zod_1.default.string().optional(),
     user_id: zod_1.default.string(),
+    owner_id: zod_1.default.string(),
+    msg: zod_1.default.string(),
     post_id: zod_1.default.string().optional(),
     comment_id: zod_1.default.string().optional(),
 });

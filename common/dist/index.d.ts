@@ -137,17 +137,23 @@ export declare const validateNotification: z.ZodObject<{
     type: z.ZodString;
     like_id: z.ZodOptional<z.ZodString>;
     user_id: z.ZodString;
+    owner_id: z.ZodString;
+    msg: z.ZodString;
     post_id: z.ZodOptional<z.ZodString>;
     comment_id: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     type: string;
     user_id: string;
+    owner_id: string;
+    msg: string;
     like_id?: string | undefined;
     post_id?: string | undefined;
     comment_id?: string | undefined;
 }, {
     type: string;
     user_id: string;
+    owner_id: string;
+    msg: string;
     like_id?: string | undefined;
     post_id?: string | undefined;
     comment_id?: string | undefined;

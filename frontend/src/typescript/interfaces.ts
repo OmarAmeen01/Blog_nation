@@ -61,15 +61,19 @@ export interface Content{
   user:User,
   user_id: string,
   }
+export interface NotificationSettings{
 
-
-// state type
-export interface Noti{
-  id:string, 
+    id:string, 
     likes:boolean,
     shares:boolean,
     comments:boolean,
     post_uploads:boolean,
+  
+}
+
+// state type
+export interface Noti{
+  notificationSettings:Notification,
     notifications:Notification[]
 
 }
@@ -79,6 +83,7 @@ export interface Notification{
   user_id:string,
   like_id:string,
   post_id:string,
+  msg?:string,
   comments:Comments,
   timestamp:string,
   user:User,
@@ -86,7 +91,9 @@ export interface Notification{
     id:string
   },
   post:{
-    content:Block[]
+    content:{
+      Blocks:Block[]
+    }
   }
 }
 export interface ProfileDetails{

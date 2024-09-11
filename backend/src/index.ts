@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { userRouter } from "./routes/user";
 import { blogRouter } from "./routes/blog";
 import { cors } from "hono/cors";
+import { rateLimiter } from "../middlewares/RateLimiting";
 const app = new Hono<
 {
   Bindings:{
@@ -16,14 +17,9 @@ app.use('*', cors({
   allowHeaders: ['Content-Type', 'Authorization'] 
 }));
 
-app.post("/uploadFile",async(c)=>{
-return  c.json({
-  success: 1,
-  file: {
-    url:"https://drive.google.com/thumbnail?id=1lzR-RbBWASrUaeV_fgGNsf9Pi2JClps1&sz=w1000"
-  }
-})
-})
+ app.get("/",rateLimiter,async(c)=>{
+  return  c.json({msg:"fuck uyou"})
+ })
 app.route("/api/user",userRouter)
 app.route("/api/blog",blogRouter)
 

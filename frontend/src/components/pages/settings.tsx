@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../common/button";
 import Switch from "../common/Switch";
 import { useSelector,useDispatch } from "react-redux";
-import { Noti, Store, User } from "../../typescript/interfaces";
+import { NotificationSettings, Store, User } from "../../typescript/interfaces";
 import ConfimationDailog from "../common/confirmationDailog";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,23 +16,11 @@ export default function Settings (){
 const userApiUrl = import.meta.env.VITE_USER_API_URL
 const navigate = useNavigate()
 const dispatch = useDispatch()
-const  notiSettings = useSelector<Store>(state=>state.noti) as Noti
+const  notiSettings = useSelector<Store>(state=>state.noti.notificationSettings) as NotificationSettings
 const  userDetails = useSelector<Store>(state=>state.auth.userData)
 const userData = userDetails as User
 
-useEffect(()=>{
-  axios.get(`${userApiUrl}/notification_settings`,{withCredentials:true}).then(response=>{
-    
-    if(response.data.status){
-    const data=response.data.data
-    dispatch(setNotiStates(["id",data.id]))
-       dispatch(setNotiStates(["likes", data.likes]))
-       dispatch(setNotiStates(["shares", data.shares]))
-       dispatch(setNotiStates(["post_uploads", data.post_uploads]))
-       dispatch(setNotiStates(["comments", data.comments]))
-    }
-  })
-},[])
+
 
 
 //functions
@@ -59,9 +47,19 @@ function handleDeleteClick(){
   axios.put(`${userApiUrl}/notification_settings/${notiSettings.id}`,notiSettings,{withCredentials:true}).then(response=>{
  console.log(response)
     if(response.data.status){
+
       const data= response.data.data
-      dispatch(setNotiStates(["shares",data.shares]))
+
+      dispatch(setNotiStates({
+        id:data.id,
+      likes:data.likes,
+      shares:data.shares,
+      comments:data.comments,
+      post_uploads:data.post_uploads,
+      }))
+
      setSendingResponse(false)
+     window.location.reload()
     }else{
 setSendingResponse(false)
     }
@@ -122,7 +120,8 @@ setSendingResponse(false)
                 </p>
                 <Switch id="post" isOn={notiSettings.post_uploads} handleToggle={()=>{
                     
-                    dispatch(setNotiStates(["post_uploads",!notiSettings.post_uploads]))
+                    dispatch(setNotiStates({  
+                      ...notiSettings,  post_uploads:!notiSettings.post_uploads,}))
                 }} colorOne="black" colorTwo="gray"/>
             </div>
             <div className="flex justify-between">
@@ -132,7 +131,7 @@ setSendingResponse(false)
                 <Switch id="comment" isOn={notiSettings.comments} 
                 handleToggle={()=>{
                   
-                  dispatch(setNotiStates(["comments",!notiSettings.comments ]))}}
+                  dispatch(setNotiStates({ ...notiSettings,   comments:!notiSettings.comments}))}}
                      colorOne="black" colorTwo="gray"/>
             </div>
             <div className="flex justify-between">
@@ -141,7 +140,7 @@ setSendingResponse(false)
                 </p>
                 <Switch id="like" isOn={notiSettings.likes} 
                 handleToggle={()=>{
-                  dispatch(setNotiStates(["likes",!notiSettings.likes]))
+                  dispatch(setNotiStates({ ...notiSettings, likes:!notiSettings.likes}))
                    }}colorOne="black" colorTwo="gray"/>
             </div>
             <div className="flex justify-between">
@@ -150,7 +149,7 @@ setSendingResponse(false)
                 </p>
                 <Switch id="share"  isOn={notiSettings.shares} 
                 handleToggle={()=>{
-                  dispatch(setNotiStates(["shares",!notiSettings.shares]))
+                  dispatch(setNotiStates({...notiSettings, shares:!notiSettings.shares}))
                     }} colorOne="black" colorTwo="gray"/>
             </div>
             <div>

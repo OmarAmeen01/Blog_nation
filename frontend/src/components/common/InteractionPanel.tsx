@@ -21,8 +21,7 @@ import { validateNotification } from "mediumvalidate"
 
 
 
-export default function ({ postId }: { postId: string }) {
-   console.log(postId)
+export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) {
    const ShareLinks =[
       {     name:"linkedin",
            link:`https://www.linkedin.com/shareArticle?mini=true&url=https://yourwebsite.com&title=This%20post%20was%20created%20using%20my%20own%20website!&summary=Check%20it%20out%20here&source=http://localhost:5173` ,
@@ -57,7 +56,10 @@ export default function ({ postId }: { postId: string }) {
    
    user_id:"",
  type:"",
- like_id:""
+ like_id:"",
+ owner_id:"",
+ post_id:postId,
+ msg:"Liked your Post"
  })
 
    const blogUrl = import.meta.env.VITE_POST_API_URL
@@ -110,13 +112,16 @@ export default function ({ postId }: { postId: string }) {
                const data =res.data.data
                setNotification(prev=>({
                   ...prev,
-                  type:"like",
+                  type:"likes",
                   user_id:data.user_id,
-                  like_id:data.id
+                  like_id:data.id,
+                  owner_id:ownerId,
+                  post_id:postId,
+                  msg:`Liked your post`
                 }))
+                setResponseSend(true)
                setIsLikeClicked(res.data.status)
              
-          setResponseSend(true)
              }
           }).catch(error => {
              console.log(error)
@@ -159,7 +164,7 @@ useEffect(()=>{
          <img className="h-6 w-6 " src={isLikeClicked ? unlike : like} title="Like" alt="" />
          <p id="like" className="text-gray-500">{likeCount}</p>
       </button>
-     {isCommentClicked&& <CommentComponet comments={comments} postId={postId} updateComponent={handleComponentUpdate} isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>}
+     {isCommentClicked&& <CommentComponet ownerId={ownerId} comments={comments} postId={postId} updateComponent={handleComponentUpdate} isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>}
       <button className="hover:opacity-60 flex gap-1 " onClick={handleCommentClick}>
          <img src={commet} className="h-6 w-6 hover:opacity-60" alt="" title="Comment" />
          <p id="like" className="text-gray-500">{totalComments}</p>

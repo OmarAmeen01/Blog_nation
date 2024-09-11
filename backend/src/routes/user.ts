@@ -652,7 +652,7 @@ userRouter.get('/notification_settings',authMiddleware,async(c)=>{
         }
             
         return c.json({
-                msg: "your don't have account",
+                msg: "no settings found",
                 status:false
             })
         }
@@ -734,7 +734,7 @@ userRouter.post('/notification',authMiddleware,async(c)=>{
         data:body
     })
     if(notification){
-       
+    
         return c.json({
             msg:"Notification saved to database",
             status:true,
@@ -756,7 +756,6 @@ userRouter.post('/notification',authMiddleware,async(c)=>{
    }
 
     }else{
-        console.log(validate.data)
         console.log(validate.error.errors[0].message)
         return c.json({
             msg:"Incorrect format",
@@ -784,7 +783,7 @@ userRouter.get('/notifications',authMiddleware,async(c)=>{
             if(typeof userId ==="string"){
              
         const notification =  await prisma.notification.findMany({
-                            where: {user_id:userId},
+                            where: {owner_id:userId},
                             include:{
                                 post:{
                                    select:{

@@ -5,19 +5,22 @@ import Footer from './components/common/footer'
   import { Outlet } from 'react-router-dom'
   import axios from 'axios'
   import { authenticate } from './store/authSlice'
-  import { useDispatch,useSelector } from 'react-redux'
-  import { Notification } from './typescript/interfaces'
-  import { Store } from './typescript/interfaces'
+  import { useDispatch } from 'react-redux'
 import { useEffect , useState} from 'react'
 import { setNotifications } from './store/notiSlice'
+import { setNotiStates } from './store/notiSlice'
+import HomeLoader from './components/common/loaders/homeLoader'
 function App() { 
  const [isLoading,setIsLoading]= useState(true)
  const [isError,setIsError]= useState(false)
  const [getNotificationsState,setGetNotificationState] = useState(false)
   const dispatch = useDispatch()
  const userApiUrl = import.meta.env.VITE_USER_API_URL
-const  notificationsState = useSelector<Store>(state=>state.noti.notification) as Notification[]
-const notifications =notificationsState?notificationsState:[]
+
+
+
+
+
 useEffect(()=>{
   const BackenUrl = import.meta.env.VITE_USER_API_URL
 
@@ -34,7 +37,7 @@ useEffect(()=>{
   
 
  
-},[])
+},[window.navigator.onLine])
  useEffect(()=>{
    const controller = new AbortController(); 
 const signal = controller.signal;
@@ -56,13 +59,31 @@ const signal = controller.signal;
     controller.abort()
 
    }
- },[getNotificationsState])
+ },[getNotificationsState,window.navigator.onLine])
 setInterval(()=>{
   setGetNotificationState(prev=>!prev)
 },1000*60*10)
-console.log(notifications.length)
+
+
+
+useEffect(()=>{
+  axios.get(`${userApiUrl}/notification_settings`,{withCredentials:true}).then(response=>{
+    if(response.data.status){
+      const data=response.data.data
+    dispatch(setNotiStates({
+      id:data.id,
+    likes:data.likes,
+    shares:data.shares,
+    comments:data.comments,
+    post_uploads:data.post_uploads,
+    }))
+
+    }
+  })
+},[window.navigator.onLine])
+
   return (
-   isLoading?<p>Loader here..</p>: <>
+   isLoading?<HomeLoader/>: <>
     <Nav/>
     <Outlet/>
     <Footer/>

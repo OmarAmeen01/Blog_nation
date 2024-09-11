@@ -22,7 +22,9 @@ export default function AddPost(){
    
    user_id:"",
  type:"",
- post_id:""
+ post_id:"",
+ owner_id:"",
+ msg:""
  })
   const navigate = useNavigate()
 
@@ -82,9 +84,11 @@ useEffect(()=>{
      console.log(data)
       setNotification(prev=>({
         ...prev,
-        type:"post",
+        type:"post_uploads",
         user_id:data.user_id,
-        post_id:data.id
+        post_id:data.id,
+        owner_id:data.user_id,
+        msg:`Posted ${content?.blocks[0].data.text.slice(0,20)}...`
       }))
       setResponseSend(true)
       setSendingResponse(false)

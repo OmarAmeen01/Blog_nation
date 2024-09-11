@@ -311,24 +311,10 @@ if(typeof userId==="string"){
         
      
         if(content){
-            const postData =await prisma.post.findFirst({
-                where:{user_id:userId,
-                      id:post.id
-                },
-                include:{
-                 content:true,
-                  user:{
-                     select:{
-                         id:true,
-                        first_name:true
-         
-                }
-             }
-         }
-             })
+          
             return c.json({
                 msg:"Post uploaded succesfully",
-                data:postData,
+                data:post,
                 status:true,
             })
         }else{
@@ -510,25 +496,11 @@ blogRouter.post("/like/:postid",authMiddleware,async(c)=>{
         }
       })
       if(likedPost){
-        const likedData = await prisma.likes.findMany({
-            where:{post_id:postId,
-                id:likedPost.id
-            },
-            include:{
-                user:{
-                    select:{
-                        id:true,
-                        last_name:true,
-                        first_name:true,
-                       
-                    }
-                } 
-            }
-           })
+     
         return c.json({
             msg:"liked this post",
             status: true,
-            data:likedData,
+            data:likedPost,
             authentication:true
         })
       }else{
@@ -693,19 +665,7 @@ try {
            })
            if(uploadedCommet){
 
-            const commentData = await prisma.comments.findFirst({
-                where:{post_id:postId,
-                    id:uploadedCommet.id
-                },
-                include:{
-                user:{
-                    select:{
-                        id:true,
-                    }
-                }
-                }
-              
-             })
+          
             return c.json({
                 msg:"uploaded your comment successfully",
                 status:true,

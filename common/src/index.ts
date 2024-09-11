@@ -41,6 +41,8 @@ export const validateNotification = z.object({
     type:z.string(),
     like_id:z.string().optional(),
     user_id:z.string(),
+    owner_id:z.string(),
+    msg:z.string(),
     post_id:z.string().optional(),
     comment_id:z.string().optional(),
 })

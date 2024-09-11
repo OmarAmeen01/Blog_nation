@@ -23,6 +23,7 @@ export default function PostComponent() {
              image: ""
             }
     ,
+    comments:[],
         user_id:'',
     })
     const [loading, setLoading] = useState(true)
@@ -37,7 +38,7 @@ export default function PostComponent() {
             }
         )
 
-    }, [])
+    }, [postId])
 
     return loading ? <DashboardSkeletonLoader /> : <section id="post" className="md:p-20 p-8 bg-white ">
         <article id="user" className="relative p-3">
@@ -52,7 +53,7 @@ export default function PostComponent() {
             </div>
         </article>
      <article id="controllers" className="p-3 flex relative justify-between">
-        <InteractionPanel postId={post.id} /> <AdmimEditPannel postId={post.id}/>
+        <InteractionPanel postId={post.id} ownerId={post.user_id}/> <AdmimEditPannel postId={post.id}/>
      </article>
         <article id="post" className="p-3">
              {post.content[0].blocks.map(block=>{
