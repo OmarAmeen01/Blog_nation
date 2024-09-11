@@ -73,8 +73,9 @@ export interface NotificationSettings{
 
 // state type
 export interface Noti{
-  notificationSettings:Notification,
-    notifications:Notification[]
+  notificationSettings:NotificationSettings,
+    notifications:Notification[],
+    unWatched:number
 
 }
 export interface Notification{

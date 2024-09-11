@@ -5,16 +5,19 @@ import formatDate from "../../helper/dateConverter"
 import { Noti, Notification } from "../../typescript/interfaces"
 import { Store } from "../../typescript/interfaces"
 import { Link } from "react-router-dom"
-import { useSelector} from "react-redux"
+import { useSelector,useDispatch} from "react-redux"
 import notificationFilter from "../../helper/notificationFilter"
-
+import { setWatched } from "../../store/notiSlice"
 
 export default function NotificationCenter(){
   const [bellClicked,setBellClicked] = useState(false)
 const [notifications,setNotifications] = useState<Notification[]>([])
 const  notificationsState = useSelector<Store>(state=>state.noti.notifications) as Notification[]
 const notificationSettings = useSelector<Store>(state=>state.noti.notificationSettings) as Obj
+const unWatched = useSelector<Store>(state=>state.noti.unWatched) as number
 
+
+ const dispatch = useDispatch()
 type Obj ={[key:string]:boolean}
 useEffect(()=>{
     setNotifications(notificationFilter(notificationSettings,notificationsState))
@@ -23,12 +26,13 @@ useEffect(()=>{
 
 function handleVisibility(){
    setBellClicked(prev=>!prev)
+   dispatch(setWatched(0))
 }
 
     return <div className="py-2 pr-4 ">
          <button onClick={handleVisibility} className="flex relative">  
             <img src={Bell} className=" hover:scale-125 transition-all duration-200 " alt="" />
-           {!bellClicked&& (notifications.length>9? <p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold "> {notifications?.length-1}  <span>+</span></p>:<p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold ">{notifications.length}</p>)}
+           {unWatched!==0  &&  (unWatched>9? <p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold "> {unWatched-1}  <span>+</span></p>:<p className="absolute flex left-6 -top-2 text-sm px-1 bg-black rounded-full text-white font-semibold ">{unWatched}</p>)}
             </button>
     {bellClicked&&
     

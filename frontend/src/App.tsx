@@ -5,11 +5,12 @@ import Footer from './components/common/footer'
   import { Outlet } from 'react-router-dom'
   import axios from 'axios'
   import { authenticate } from './store/authSlice'
-  import { useDispatch } from 'react-redux'
+  import { useDispatch, useSelector } from 'react-redux'
 import { useEffect , useState} from 'react'
-import { setNotifications } from './store/notiSlice'
+import { setNotifications, setWatched } from './store/notiSlice'
 import { setNotiStates } from './store/notiSlice'
 import HomeLoader from './components/common/loaders/homeLoader'
+import { Notification, Store } from './typescript/interfaces'
 function App() { 
  const [isLoading,setIsLoading]= useState(true)
  const [isError,setIsError]= useState(false)
@@ -17,6 +18,8 @@ function App() {
   const dispatch = useDispatch()
  const userApiUrl = import.meta.env.VITE_USER_API_URL
 
+const storedNotifications = useSelector<Store>(state=>state.noti.notifications) as Notification[]
+const unWatched = useSelector<Store>(state=>state.noti.unWatched) as number
 
 
 
@@ -46,7 +49,16 @@ const signal = controller.signal;
      axios.get(`${userApiUrl}/notifications`, {withCredentials:true}).then(res=>{
          console.log(res.data.data)
       if(res.data.status){
+      if(unWatched===0){
+        const unWatchedNotifications=  storedNotifications.length>1? storedNotifications.length - res.data.data.length :res.data.data.length
+        dispatch(setWatched(unWatchedNotifications))
+        dispatch(setNotifications(res.data.data))
+      }else{
+        const unWatchedNotifications=  storedNotifications.length>1?unWatched+ (storedNotifications.length - res.data.data.length) :res.data.data.length
+  
+          dispatch(setWatched(unWatchedNotifications))
          dispatch(setNotifications(res.data.data))
+      }
       }
         })
     } catch (error) {

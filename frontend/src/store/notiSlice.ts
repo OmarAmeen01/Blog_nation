@@ -8,7 +8,8 @@ const initialState = {
     comments:true,
     post_uploads:true,
   },
-    notifications:[]
+    notifications:[],
+    unWatched:0
 }
 
 export const  notiReducer = createSlice({
@@ -32,9 +33,12 @@ export const  notiReducer = createSlice({
         },
         setNotifications:(state,action)=>{
             state.notifications=action.payload
+        },
+        setWatched:(state,action)=>{
+          state.unWatched =action.payload
         }
     }
 })
 
-export const {setNotiStates,setNotifications} = notiReducer.actions
+export const {setNotiStates,setNotifications,setWatched} = notiReducer.actions
 export default notiReducer.reducer

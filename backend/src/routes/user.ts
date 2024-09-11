@@ -845,3 +845,125 @@ userRouter.get('/notifications',authMiddleware,async(c)=>{
     }
 
 })
+
+userRouter.get("/unWatch",authMiddleware,async(c)=>{
+ 
+    const cookie = getCookie(c,"authorization")
+    if(cookie){
+
+        
+       const jwtToken = decode(cookie) 
+       const {userId} = jwtToken.payload
+ 
+        try {
+            const prisma = new PrismaClient({
+                datasourceUrl: DATABASE_URL
+            }).$extends(withAccelerate())
+         
+            
+            if(typeof userId ==="string"){
+              const unWatch = prisma.notification.findFirst({
+                where:{owner_id:userId},
+                select:{
+                    un_watched:true
+                }
+              })
+              return c.json({
+                msg:"Reseted watch state",
+                data:unWatch
+            })
+            }
+        
+        }catch (error) {
+            return c.json({
+                msg:"Something went wrong",
+                status:false
+            })
+        }       
+}
+
+})
+userRouter.get("/unWatch/:id",authMiddleware,async(c)=>{
+ const  id = c.req.param('id')
+    const cookie = getCookie(c,"authorization")
+    if(cookie){
+
+        
+       const jwtToken = decode(cookie) 
+       const {userId} = jwtToken.payload
+ 
+        try {
+            const prisma = new PrismaClient({
+                datasourceUrl: DATABASE_URL
+            }).$extends(withAccelerate())
+         
+            
+            if(typeof userId ==="string"){
+              const unWatch = prisma.notification.update({
+                where:{id_owner_id:{
+                    owner_id:userId,
+                    id:id
+                }},
+                 data:{
+                    un_watched:0
+                 }
+              })
+            return c.json({
+                msg:"Reseted watch state",
+                data:{un_watched:0}
+            })
+            }
+        
+        }catch (error) {
+            return c.json({
+                msg:"Something went wrong",
+                status:false
+            })
+        }       
+}
+
+})
+
+userRouter.put("/unWatch/:id",authMiddleware,async(c)=>{
+    const  id = c.req.param('id')
+    const data = await c.req.json()
+       const cookie = getCookie(c,"authorization")
+       if(cookie){
+   
+           
+          const jwtToken = decode(cookie) 
+          const {userId} = jwtToken.payload
+    
+           try {
+               const prisma = new PrismaClient({
+                   datasourceUrl: DATABASE_URL
+               }).$extends(withAccelerate())
+            
+               
+               if(typeof userId ==="string"){
+                 const unWatch = prisma.notification.update({
+                   where:{id_owner_id:{
+                       owner_id:userId,
+                       id:id
+                   }},
+                    data:{
+                       un_watched:data
+                    }
+                 })
+               return c.json({
+                   msg:"Reseted watch state",
+                   data:{un_watched:0}
+               })
+               }
+           
+           }catch (error) {
+               return c.json({
+                   msg:"Something went wrong",
+                   status:false
+               })
+           }       
+   }
+   
+   })
+
+   
