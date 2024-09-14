@@ -5,7 +5,7 @@
     setIsPasswordInvalid:(isPasswordInvalid:boolean)=>void
  }
 
-export default function validateCredentails(email, password, setIsEmailInvalid,setIsPasswordInvalid){
+export default function validateCredentails(email:string, password:string, setIsEmailInvalid:any,setIsPasswordInvalid:any){
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 

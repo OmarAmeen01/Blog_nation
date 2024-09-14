@@ -4,7 +4,7 @@ import threeDot from "../../assets/threeDots.svg"
 import verifyPostOwner from "../../helper/verifyPostOwner"
 
 import { Link } from "react-router-dom"
-import Button from "./button"
+import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import ConfimationDailog from "./confirmationDailog"
 
 export default function AdmimEditPannel({postId}:{postId:string}){
@@ -12,13 +12,12 @@ const [isLoading,setIsLoading] =useState(true)
 const [isDeleteClicked,setIsDeletdClicked] = useState(false)
 const [isPannelClick,setIsPannelClicked] =useState(false)
 const [posts,setPosts] = useState([])
-const postApiUrl = import.meta.env.VITE_POST_API_URL
 
 
 
 
     useEffect(()=>{
-    axios.get(`${postApiUrl}/dashboard`,{
+    axiosBlogInstance.get(`/dashboard`,{
         withCredentials:true
     }).then(response=>{
       if(response.data.data){
@@ -36,7 +35,7 @@ const postApiUrl = import.meta.env.VITE_POST_API_URL
 //function
 
 async function handleDeleteClick(postId:string){
-    const response =await axios.delete(`${postApiUrl}/delete_post/${postId}`,{
+    const response =await axiosBlogInstance.delete(`/delete_post/${postId}`,{
         withCredentials:true
     })
     if(response.data.status){

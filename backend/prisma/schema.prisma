@@ -25,6 +25,8 @@ model User {
   image String?        // note Bytes data type is used to store images videos in through prisma which is converted to respective jargon in the rescpective db
   pronoun String?
   domain String?
+  un_watched Int?
+  watched Int?
   about String?
   domain_title String?
   cover_image String?
@@ -108,7 +110,6 @@ owner_id String
 msg String
 user User @relation(fields: [user_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
 post_id String?
-un_watched Int?
 post Post? @relation(fields: [post_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
 comment_id String?
 comments Comments? @relation(fields: [comment_id],references: [id], onDelete:Cascade,onUpdate: Cascade)
@@ -118,6 +119,6 @@ comments Comments? @relation(fields: [comment_id],references: [id], onDelete:Cas
 model RateLimiter {
  id String @default(uuid())
  user_id String
- Requests String
+ Requests Int
  @@id([id,user_id])
 }

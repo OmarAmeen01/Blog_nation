@@ -1,5 +1,4 @@
 
-import visible from "../../assets/eye-off-outline.svg"
 type Input ={
     type?:string,
     placeholder:string,

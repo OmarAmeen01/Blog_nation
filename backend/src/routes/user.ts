@@ -44,20 +44,15 @@ async function hashPassword(password: string): Promise<string> {
     
     return hashedPassword;
 }
-
-const JWT_PASSWORD = "1m,2t%#(*A)Y56oP^6"
-const DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZTEwYzFiYzMtY2NkMy00NjViLWJhMjUtNGNmMmJlNTI1OGYwIiwidGVuYW50X2lkIjoiOWUyNzQ0MTBhMTI3YzY0YzM4Y2NlMDBhNWVmMWQxYmY0Mzk0MGMxNGVmOWM3YzQyYTk4MzRiMmE3YzEyZDNjZCIsImludGVybmFsX3NlY3JldCI6IjgwNTA4YjMyLTA0NjktNGYxMi1iNmFhLTYwOWYxMWYyNTRjZSJ9.OkLm_nAKQzSzfZI_qxiBlerrMYFwLX_eprlaCWxQCYU"
-
-
-// routes 
-
 userRouter.post("/signup", async (c) => {
-    //env variables
-    // notes here only posible when you declare bindings in HONO else you have to use env<databse:string>(c) 
-    // and you have to run this command first npx wrangler secret put datavbaed-url env production 
-
+    const JWT_PASSWORD  = c.env.JWT_PASSWORD
+    const DATABASE_URL= c.env.DATABASE_URL;
     const prisma = new PrismaClient(
-        { datasourceUrl: DATABASE_URL }
+        {datasources: {
+            db: {
+              url: DATABASE_URL,
+            },
+          }, }
     ).$extends(withAccelerate())
     const body = await c.req.json()
 
@@ -163,9 +158,9 @@ userRouter.post("/signup", async (c) => {
 userRouter.post("/signin", async (c) => {
     //env
     //  const JWT_PASSWORD = c.env.JWT_PASSWORD
-    //  const DATABASE_URL= c.env.DATABASE_URL
-    // const COOKIE_SECRET = c.env.COOKIE_SECRET
-    // varaible
+     const DATABASE_URL= c.env.DATABASE_URL
+   const  JWT_PASSWORD  =c.env.JWT_PASSWORD
+
 
     const body = await c.req.json()
     const validate = signin_out.safeParse(body)
@@ -178,7 +173,6 @@ userRouter.post("/signin", async (c) => {
             }).$extends(withAccelerate())
 
             const Cookie =  getCookie(c,"authorization")
-           console.log(Cookie,"dfjsdfj")
             if (Cookie) {
                 return c.json({
                     msg: "you are already signed in",
@@ -258,7 +252,7 @@ userRouter.post("/signin", async (c) => {
 
 userRouter.delete("/delete_user", authMiddleware, async (c) => {
     // const COOKIE_SECRET =c.env.COOKIE_SECRET
-    // const DATABASE_URL= c.env.DATABASE_URL
+    const DATABASE_URL= c.env.DATABASE_URL
 
     const cookie = getCookie(c, "authorization") as string
 
@@ -364,7 +358,7 @@ userRouter.get("/signout", authMiddleware, async (c) => {
 
 userRouter.put("/profile", authMiddleware, async (c) => {
     const body = await c.req.json()
-    
+    const DATABASE_URL= c.env.DATABASE_URL
     const validate = validateProfileDetails.safeParse(body)
     if (validate.success) {
 
@@ -425,7 +419,7 @@ userRouter.put("/profile", authMiddleware, async (c) => {
 
 
 userRouter.get("/profile/:user_id", async (c) => {
-
+    const DATABASE_URL= c.env.DATABASE_URL
 const userId = c.req.param("user_id")
 
     try {
@@ -489,7 +483,7 @@ userRouter.put("/change_password", authMiddleware, async (c) => {
 const body = await c.req.json()
 
     const cookie = getCookie(c, "authorization") as string
-
+    const DATABASE_URL= c.env.DATABASE_URL
     const jwtToken = decode(cookie)
 
     const { userId } = jwtToken.payload
@@ -571,6 +565,7 @@ const body = await c.req.json()
 })
 
 userRouter.get("/login_status",async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
  const cookie = getCookie(c,"authorization")
  if(cookie){
     const jwtToken = decode(cookie) 
@@ -622,6 +617,7 @@ userRouter.get("/login_status",async(c)=>{
 })
 
 userRouter.get('/notification_settings',authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
     const cookie = getCookie(c,"authorization")
      if(cookie){
         const jwtToken = decode(cookie) 
@@ -669,6 +665,7 @@ userRouter.get('/notification_settings',authMiddleware,async(c)=>{
 })
 
 userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
     const body = await c.req.json()
     const id  = c.req.param('id')
 
@@ -720,6 +717,7 @@ userRouter.put('/notification_settings/:id',authMiddleware,async(c)=>{
 
 userRouter.post('/notification',authMiddleware,async(c)=>{
     const body = await c.req.json()
+    const DATABASE_URL= c.env.DATABASE_URL
     console.log(body)
  const validate = validateNotification.safeParse(body)
  if(validate.success){
@@ -769,6 +767,7 @@ userRouter.post('/notification',authMiddleware,async(c)=>{
 // long pooling implementation take notes here
 
 userRouter.get('/notifications',authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
     const cookie = getCookie(c,"authorization")
     if(cookie){
        const jwtToken = decode(cookie) 
@@ -847,7 +846,7 @@ userRouter.get('/notifications',authMiddleware,async(c)=>{
 })
 
 userRouter.get("/unWatch",authMiddleware,async(c)=>{
- 
+    const DATABASE_URL= c.env.DATABASE_URL
     const cookie = getCookie(c,"authorization")
     if(cookie){
 
@@ -862,16 +861,25 @@ userRouter.get("/unWatch",authMiddleware,async(c)=>{
          
             
             if(typeof userId ==="string"){
-              const unWatch = prisma.notification.findFirst({
-                where:{owner_id:userId},
+              const unWatch =await prisma.user.findFirst({
+                where:{id:userId},
                 select:{
-                    un_watched:true
+                    un_watched:true,
+                    watched:true,
                 }
               })
-              return c.json({
-                msg:"Reseted watch state",
-                data:unWatch
-            })
+            if(unWatch){
+                return c.json({
+                    msg:"Found watch state",
+                    data:unWatch,
+                    status:true
+                })
+            }else{
+                return c.json({
+                    msg:"Nothing was found",
+                    status:false
+                })
+            }
             }
         
         }catch (error) {
@@ -883,8 +891,9 @@ userRouter.get("/unWatch",authMiddleware,async(c)=>{
 }
 
 })
-userRouter.get("/unWatch/:id",authMiddleware,async(c)=>{
- const  id = c.req.param('id')
+userRouter.put("/Watched",authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
+    const {watched}= await c.req.json()
     const cookie = getCookie(c,"authorization")
     if(cookie){
 
@@ -899,22 +908,30 @@ userRouter.get("/unWatch/:id",authMiddleware,async(c)=>{
          
             
             if(typeof userId ==="string"){
-              const unWatch = prisma.notification.update({
-                where:{id_owner_id:{
-                    owner_id:userId,
-                    id:id
-                }},
+              const unWatch =await prisma.user.update({
+                where:{id:userId},
                  data:{
-                    un_watched:0
+                    un_watched:0,
+                    watched:watched
                  }
               })
-            return c.json({
-                msg:"Reseted watch state",
-                data:{un_watched:0}
-            })
+
+              if(unWatch){
+
+                  return c.json({
+                      msg:"Reseted watch state",
+                      data:{un_watched:0},
+                      status:true
+                    })
+              }else{
+                return c.json({
+                    msg:"model was not updated",
+                    status:false
+                })
             }
-        
+            }
         }catch (error) {
+            console.log(error)
             return c.json({
                 msg:"Something went wrong",
                 status:false
@@ -924,9 +941,9 @@ userRouter.get("/unWatch/:id",authMiddleware,async(c)=>{
 
 })
 
-userRouter.put("/unWatch/:id",authMiddleware,async(c)=>{
-    const  id = c.req.param('id')
-    const data = await c.req.json()
+userRouter.put("/unWatch",authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
+    const {un_watched}= await c.req.json()
        const cookie = getCookie(c,"authorization")
        if(cookie){
    
@@ -941,22 +958,34 @@ userRouter.put("/unWatch/:id",authMiddleware,async(c)=>{
             
                
                if(typeof userId ==="string"){
-                 const unWatch = prisma.notification.update({
-                   where:{id_owner_id:{
-                       owner_id:userId,
-                       id:id
-                   }},
+                 const unWatch =await prisma.user.update({
+                   where:{id:userId},
                     data:{
-                       un_watched:data
+                      un_watched:un_watched
+                    },
+                    select:{
+                        un_watched:true,
+                        watched:true
                     }
                  })
-               return c.json({
-                   msg:"Reseted watch state",
-                   data:{un_watched:0}
-               })
+                 if(unWatch){
+
+
+                     return c.json({
+                         msg:"Updated watch state",
+                         data:unWatch,
+                         status:true
+                     })
+                 }else{
+                    return c.json({
+                        msg:"model was not updated",
+                        status:false
+                    })
+                 }
                }
            
            }catch (error) {
+            console.log(error)
                return c.json({
                    msg:"Something went wrong",
                    status:false
@@ -966,4 +995,3 @@ userRouter.put("/unWatch/:id",authMiddleware,async(c)=>{
    
    })
 
-   

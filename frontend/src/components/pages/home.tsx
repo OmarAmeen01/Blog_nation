@@ -2,23 +2,14 @@ import Button from "../common/button"
 import { useEffect, useState } from "react"
 import heroImg from "../../assets/vecteezy_man-working-with-computer-with-app-in-isometric-illustration_-removebg-preview.png"
 import { useDispatch, useSelector } from "react-redux"
-import InteractionPanel from "../common/InteractionPanel"
-import Signin from "../auth/signin"
 import { setIsFormVisible, setIsSigninClicked, setIsSignupClicked } from "../../store/authSlice"
-import axios from "axios"
-import { Link } from "react-router-dom"
 import { setPosts } from "../../store/postSlice"
-import { Post,Store, User } from "../../typescript/interfaces"
-import dateConverter from "../../helper/dateConverter"
+import { Post,Store} from "../../typescript/interfaces"
 import sortPosts from "../../helper/sortPosts"
 import uniqueCategoryFilter from "../../helper/uniqueCategoryFilter"
-import AdmimEditPannel from "../common/adminEditPannel"
+import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import DashboardSkeletonLoader from "../common/loaders/skeltonLoaderDashboard"
 import ListPost from "../common/ListPost"
-//function 
-const postApiUrl = import.meta.env.VITE_POST_API_URL
-//  interface
-
 
 
 export default function Home() {
@@ -27,31 +18,26 @@ export default function Home() {
 const [isCategoryCliked,setCategoryClicked]=useState(false)
 const [categoryName,setCategoryName] =useState("")
   const [blogPosts,setblogPosts] = useState<Post[]>([])
-  const [Error,setError] = useState<string>("")
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // if you dont update the state of component it wont't work or show on render 
     try {
     setIsLoading(true)
     
    async function getPost() {
     
-    const response = await axios.get(`${postApiUrl}/posts`)
+    const response = await axiosBlogInstance.get(`/posts`)
 
     if(response.data.status){
       console.log(response.data.data)
      dispatch(setPosts([true, response.data.data]))
      setblogPosts(response.data.data)
      setIsLoading(false)
-    }else{
-      setError("Could load your feed try after some time")
     }
    }
  getPost()
     } catch (error) {
-   setError("Could load your feed try after some time")
-
+      console.log(error)
     }
 
 
@@ -63,7 +49,7 @@ const [categoryName,setCategoryName] =useState("")
   const isSigninClicked = useSelector<Store>(state => state.auth.isSigninClicked) as boolean
   const isSignupClicked = useSelector<Store>(state => state.auth.isSignupClicked)
   const status = useSelector<Store>(state=>state.auth.status) as boolean
-  const stateUser = useSelector<Store>(state=>state.auth.userData) as User
+ 
  
   
   return (<>
@@ -76,7 +62,7 @@ const [categoryName,setCategoryName] =useState("")
            <div className="flex  gap-4">
               <Button name="Sign up" onClick={() => {
                if(!window.navigator.onLine){
-                alert("You are offline")
+                alert("You are offline connect and refresh")
                }
                else{
                 dispatch(setIsSignupClicked(!isSignupClicked))
@@ -86,7 +72,7 @@ const [categoryName,setCategoryName] =useState("")
               }} />
               <Button name="Sign in" onClick={() => {
                if(!window.navigator.onLine){
-                alert("Your are offline")
+                alert("Your are offline connect and refresh")
                 }else {
                   dispatch(setIsSigninClicked(!isSigninClicked))
                   dispatch(setIsSigninClicked(!isSignupClicked))

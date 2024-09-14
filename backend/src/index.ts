@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { userRouter } from "./routes/user";
 import { blogRouter } from "./routes/blog";
 import { cors } from "hono/cors";
-import { rateLimiter } from "../middlewares/RateLimiting";
 const app = new Hono<
 {
   Bindings:{
@@ -17,9 +16,7 @@ app.use('*', cors({
   allowHeaders: ['Content-Type', 'Authorization'] 
 }));
 
- app.get("/",rateLimiter,async(c)=>{
-  return  c.json({msg:"fuck uyou"})
- })
+
 app.route("/api/user",userRouter)
 app.route("/api/blog",blogRouter)
 

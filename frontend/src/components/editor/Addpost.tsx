@@ -1,23 +1,22 @@
 import EditorJS, { OutputData, ToolConstructable } from '@editorjs/editorjs';
 import { useEffect,useRef, useState } from 'react';
 import Header from '@editorjs/header';
-import axios from 'axios';
 import Button from '../common/button';
 import InputComponet from '../common/inputComponet';
 import { useNavigate } from 'react-router-dom';
 import { validateNotification } from 'mediumvalidate';
+import axiosBlogInstance from '../../api/AxiosBlogInstance';
+import axiosUserInstance from '../../api/AxiosUserInstance';
 // always initialise in useEffect hook
  
 
 export default function AddPost(){
-  const BlogApiUrl =import.meta.env.VITE_POST_API_URL
   const [sendingResponse,setSendingResponse] = useState(false)
   const[isSubmitCliked,setIsSubmitClicked] =useState(false)
   const [content,setContent] = useState<OutputData>()
   const [isPostClicked,setIsPostClicked] = useState(false)
   const [category,setCategory] = useState("")
   const [isReponseSend,setResponseSend] = useState(false)
-  const userApiUrl = import.meta.env.VITE_USER_API_URL
   const [notification,setNotification] = useState<validateNotification>({
    
    user_id:"",
@@ -78,7 +77,7 @@ useEffect(()=>{
        }
        console.log(postDetails)
      try {
-      const  response= await axios.post(`${BlogApiUrl}/addpost`,postDetails,{withCredentials:true})
+      const  response= await axiosBlogInstance.post(`/addpost`,postDetails,{withCredentials:true})
     if(response.data.status){
      const data= response.data.data
      console.log(data)
@@ -111,7 +110,7 @@ useEffect(()=>{
     }
   
     useEffect(()=>{
-      isReponseSend&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+      isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
          console.log(res)
          navigate("/dashboard")
        })

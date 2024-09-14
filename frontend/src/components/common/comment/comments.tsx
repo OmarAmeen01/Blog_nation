@@ -7,6 +7,8 @@ import axios from "axios"
 import profile from "../../../assets/profile.png"
 import Comment from "./comment"
 import { validateNotification } from "mediumvalidate"
+import axiosBlogInstance from "../../../api/AxiosBlogInstance"
+import axiosUserInstance from "../../../api/AxiosUserInstance"
 
  type CommentComponet={
   isCommentClicked:boolean,
@@ -31,10 +33,9 @@ msg:""
   const [text, setText] = useState("")
   const [sentresponse,setsentResponse] = useState(false)
   const userDetails = useSelector<Store>(state => state.auth.userData) as User
-  const blogUrl = import.meta.env.VITE_POST_API_URL
- const userApiUrl = import.meta.env.VITE_USER_API_URL
+
   function handleSubmit() {
-  axios.post(`${blogUrl}/comment/${postId}`,{text:text},{withCredentials:true}).then(res=>{
+  axiosBlogInstance.post(`/comment/${postId}`,{text:text},{withCredentials:true}).then(res=>{
     if(res.data.status){
     const data = res.data.data
     updateComponent()
@@ -61,7 +62,7 @@ updateComponent()
 
   useEffect(()=>{
     console.log(notification)
-   sentresponse&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+   sentresponse&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
       console.log(res)
     })
   },[sentresponse])

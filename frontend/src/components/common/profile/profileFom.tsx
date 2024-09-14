@@ -2,8 +2,7 @@ import { ProfileDetails } from "../../../typescript/interfaces";
 import React, { useState } from "react";
 import InputComponet from "../inputComponet";
 import Button from "../button";
-import axois from "axios"
-
+import axiosUserInstance from "../../../api/AxiosUserInstance";
 
 export default function ProfileForm({profileDetails,shouldShow,handleToggle}:{profileDetails?:ProfileDetails, shouldShow:boolean, handleToggle:()=>void}){
 const [profileInfo,setProfileInfo] = useState({
@@ -21,11 +20,10 @@ const [Error,setError] = useState({
   error:"",
   isError:false,
 })
-const userApiUrl= import.meta.env.VITE_USER_API_URL
 function handleSubmit(e:React.FormEvent){
   e.preventDefault() 
   setSendingResponse(true)
-  axois.put(`${userApiUrl}/profile`,profileInfo,{withCredentials:true}).then(response=>{
+  axiosUserInstance.put(`/profile`,profileInfo,{withCredentials:true}).then(response=>{
     console.log(response)
     if(response.data.status){
       handleToggle()

@@ -9,11 +9,11 @@ import axios from "axios";
 import { unAuthenticate } from "../../store/authSlice";
 import ChangePassword from "../auth/ChangePassword"
 import {  setNotiStates } from "../../store/notiSlice";
+import axiosUserInstance from "../../api/AxiosUserInstance";
 export default function Settings (){
   const [sendingResponse,setSendingResponse] =useState(false)
  const [isChangePasswordVisible,toggleChangePassword] =useState(false)
  const [isDeleteClicked,setIsDeletdClicked] =useState(false)
-const userApiUrl = import.meta.env.VITE_USER_API_URL
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const  notiSettings = useSelector<Store>(state=>state.noti.notificationSettings) as NotificationSettings
@@ -26,7 +26,7 @@ const userData = userDetails as User
 //functions
 
 function handleDeleteClick(){
- axios.delete(`${userApiUrl}/delete_user`,{withCredentials:true}).then(response=>{
+ axiosUserInstance.delete(`/delete_user`,{withCredentials:true}).then(response=>{
    if(response.data.status){
    navigate('/')
    dispatch(unAuthenticate())
@@ -44,7 +44,7 @@ function handleDeleteClick(){
 
  function handleSaveClick(){
   setSendingResponse(true)
-  axios.put(`${userApiUrl}/notification_settings/${notiSettings.id}`,notiSettings,{withCredentials:true}).then(response=>{
+  axiosUserInstance.put(`/notification_settings/${notiSettings.id}`,notiSettings,{withCredentials:true}).then(response=>{
  console.log(response)
     if(response.data.status){
 

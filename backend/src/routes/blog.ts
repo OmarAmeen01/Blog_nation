@@ -1,9 +1,8 @@
 import { Hono } from "hono";
-import {validatePost} from "mediumvalidate"
-import { getCookie } from "hono/cookie";
+import { getCookie, setCookie } from "hono/cookie";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { decode } from "hono/jwt";
+import { decode, sign } from "hono/jwt";
 import {authMiddleware} from "../../middlewares/authmiddleware";
 import { cors } from "hono/cors";
 export const blogRouter  = new Hono<{
@@ -21,13 +20,13 @@ blogRouter.use('*', cors({
     allowHeaders: ['Content-Type', 'Authorization'] 
 }));
 
-
 // secrets
-const DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZTEwYzFiYzMtY2NkMy00NjViLWJhMjUtNGNmMmJlNTI1OGYwIiwidGVuYW50X2lkIjoiOWUyNzQ0MTBhMTI3YzY0YzM4Y2NlMDBhNWVmMWQxYmY0Mzk0MGMxNGVmOWM3YzQyYTk4MzRiMmE3YzEyZDNjZCIsImludGVybmFsX3NlY3JldCI6IjgwNTA4YjMyLTA0NjktNGYxMi1iNmFhLTYwOWYxMWYyNTRjZSJ9.OkLm_nAKQzSzfZI_qxiBlerrMYFwLX_eprlaCWxQCYU"
+// const DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZTEwYzFiYzMtY2NkMy00NjViLWJhMjUtNGNmMmJlNTI1OGYwIiwidGVuYW50X2lkIjoiOWUyNzQ0MTBhMTI3YzY0YzM4Y2NlMDBhNWVmMWQxYmY0Mzk0MGMxNGVmOWM3YzQyYTk4MzRiMmE3YzEyZDNjZCIsImludGVybmFsX3NlY3JldCI6IjgwNTA4YjMyLTA0NjktNGYxMi1iNmFhLTYwOWYxMWYyNTRjZSJ9.OkLm_nAKQzSzfZI_qxiBlerrMYFwLX_eprlaCWxQCYU"
 
 
 // get all posts of the user
 blogRouter.get("/dashboard",authMiddleware,async(c)=>{   
+    const DATABASE_URL =c.env.DATABASE_URL
     const cookie = getCookie(c,"authorization") as string
     const jwt = decode(cookie)
     const {userId} = jwt.payload
@@ -122,6 +121,7 @@ return c.json({
 
 blogRouter.get("/posts/:postid",async(c)=>{
 const postId=  c.req.param("postid")
+const DATABASE_URL =c.env.DATABASE_URL
 try {
     const prisma =new PrismaClient({
     datasourceUrl:DATABASE_URL
@@ -195,6 +195,7 @@ try {
 // get all posts
 blogRouter.get("/posts",async(c)=>{
 try {
+    const DATABASE_URL =c.env.DATABASE_URL
     console.log("hi")
    const prisma = new PrismaClient({
     datasourceUrl:DATABASE_URL
@@ -264,6 +265,7 @@ if(posts){
 
 
 blogRouter.post("/addpost",authMiddleware,async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
  const cookie = getCookie(c,"authorization") as string
  const jwt = decode(cookie)
  const {userId} = jwt.payload
@@ -354,6 +356,7 @@ if(typeof userId==="string"){
 //update the post;
 
 blogRouter.put("/addpost/:postid",authMiddleware,async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
     
 const postId= c.req.param("postid") // note here how to get parameter
 const body = await c.req.json()
@@ -421,6 +424,7 @@ try {
 
 
 blogRouter.delete("/delete_post/:postid",authMiddleware,async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
  
 const cookie = getCookie(c,"authorization") as string
 const jwt = decode(cookie)
@@ -477,6 +481,8 @@ const {userId} = jwt.payload
 
 blogRouter.post("/like/:postid",authMiddleware,async(c)=>{
  const postId = c.req.param("postid")
+ const DATABASE_URL =c.env.DATABASE_URL
+
     const cookie = getCookie(c,"authorization") as string
     const  jwt = decode(cookie)
     const {userId} = jwt.payload
@@ -529,6 +535,8 @@ blogRouter.post("/like/:postid",authMiddleware,async(c)=>{
 
 blogRouter.get("/likes/:postid",async(c)=>{
   const postId = c.req.param("postid")
+  const DATABASE_URL =c.env.DATABASE_URL
+
    try {
     const prisma = new PrismaClient({
         datasourceUrl:DATABASE_URL
@@ -579,6 +587,8 @@ blogRouter.get("/likes/:postid",async(c)=>{
    }
 })
 blogRouter.delete("/like/:postid",async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
+
     const postId = c.req.param("postid")
     const cookie = getCookie(c,"authorization") as string
     const  jwt = decode(cookie)
@@ -640,6 +650,8 @@ blogRouter.delete("/like/:postid",async(c)=>{
 
 blogRouter.post("/comment/:postid",authMiddleware,async(c)=>{
 const postId = c.req.param('postid')
+const DATABASE_URL =c.env.DATABASE_URL
+
 const cookie = getCookie(c,"authorization") as string
 const jwt = decode(cookie)
 const {userId} = jwt.payload
@@ -699,6 +711,8 @@ try {
 })
 blogRouter.put("edit_comment/:postid/:comentid",authMiddleware,async(c)=>{
     const postId = c.req.param('postid')
+    const DATABASE_URL =c.env.DATABASE_URL
+
     const commentId = c.req.param('comentid')
     const cookie = getCookie(c,"authorization") as string
     const jwt = decode(cookie)
@@ -762,6 +776,8 @@ blogRouter.put("edit_comment/:postid/:comentid",authMiddleware,async(c)=>{
 
 blogRouter.delete("/delete_comment/:postid/:commentid",authMiddleware,async(c)=>{
 const commentId = c.req.param('commentid')
+const DATABASE_URL =c.env.DATABASE_URL
+
 const postId = c.req.param('postid')
 const cookie = getCookie(c,"authorization") as string
 const jwt = decode(cookie)
@@ -858,6 +874,7 @@ return  c.json({
 })
 
 blogRouter.get("/comments/:postid",async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
     
   const postId = c.req.param('postid')
 
@@ -910,6 +927,7 @@ return c.json({ msg:"Failed to find the feed",
 
 
 blogRouter.get("/authenticate_editor/:postId",authMiddleware,async(c)=>{
+    const DATABASE_URL =c.env.DATABASE_URL
     
         const postId = c.req.param("postId")
         const cookie = getCookie(c,"authorization") as string

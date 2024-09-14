@@ -8,17 +8,17 @@
  import profile from "../../assets/profile.svg"
 import emailEncoder from "../../helper/emailEcoder" 
 import write  from "../../assets/write.svg"
+import axiosUserInstance from "../../api/AxiosUserInstance"
 export default function DropDown({shouldShow, handleVisibility}:{shouldShow:boolean,handleVisibility:()=>void}){
     const dispatch =useDispatch()
-    const userEndPoint = import.meta.env.VITE_USER_API_URL
     const user = useSelector<Store>(state=>state.auth.userData) as User
     const LoginStatus = useSelector<Store>(state=>state.auth.status) as boolean
  const email = user?.email as string
  const navigate = useNavigate()
+
  function handleSignout(){
-      
          try {
-         axios.get(`${userEndPoint}/signout`,{withCredentials:true}).then(data=>{
+         axiosUserInstance.get(`/signout`,{withCredentials:true}).then(data=>{
             console.log(data)
             dispatch(unAuthenticate())
         navigate("/")

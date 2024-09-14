@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import { useSelector,useDispatch} from "react-redux"
 import notificationFilter from "../../helper/notificationFilter"
 import { setWatched } from "../../store/notiSlice"
+import axiosUserInstance from "../../api/AxiosUserInstance"
 
 export default function NotificationCenter(){
   const [bellClicked,setBellClicked] = useState(false)
@@ -27,6 +28,9 @@ useEffect(()=>{
 function handleVisibility(){
    setBellClicked(prev=>!prev)
    dispatch(setWatched(0))
+   axiosUserInstance.put(`/Watched`,{ watched:notifications.length},{withCredentials:true}).then(res=>{
+      console.log(res)
+   })
 }
 
     return <div className="py-2 pr-4 ">

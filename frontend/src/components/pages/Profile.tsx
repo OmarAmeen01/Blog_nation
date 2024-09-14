@@ -13,8 +13,8 @@ import { useParams } from "react-router-dom"
 import placeholder from "../../assets/landscape-placeholder-svgrepo-com.svg"
 import { useSelector } from "react-redux"
 import ListPost from "../common/ListPost"
-
-
+import axiosUserInstance from "../../api/AxiosUserInstance"
+import axiosBlogInstance from "../../api/AxiosBlogInstance"
 export default function Profile(){
   
     const [posts,setPosts]= useState<Post[]>([])
@@ -23,14 +23,12 @@ export default function Profile(){
     const [isLoading,setIsLoading] =useState(true)
     const storedUser = useSelector<Store>(state=>state.auth.userData)
     const userDetails = storedUser as User
-const blogUrl = import.meta.env.VITE_POST_API_URL
-const userApiUrl= import.meta.env.VITE_USER_API_URL
  const {id} = useParams()
     useEffect(()=>{
 
         
       
-   axios.get(`${userApiUrl}/profile/${id}`).then(response=>{
+   axiosUserInstance.get(`/profile/${id}`).then(response=>{
 
     if(response.data.status){
       setProfile(response.data.data)
@@ -44,7 +42,7 @@ const userApiUrl= import.meta.env.VITE_USER_API_URL
    setIsLoading(false)
    })
 
-   axios.get(`${blogUrl}/dashboard`,{withCredentials:true}).then(response=>{
+   axiosBlogInstance.get(`/dashboard`,{withCredentials:true}).then(response=>{
     if(response.data.data){
         setPosts(response.data.data.slice(0,2))
         setIsLoading(false)

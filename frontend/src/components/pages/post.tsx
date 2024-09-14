@@ -7,8 +7,9 @@ import { Post } from "../../typescript/interfaces"
 import formatDate from "../../helper/dateConverter"
 import InteractionPanel from "../common/InteractionPanel"
 import AdmimEditPannel from "../common/adminEditPannel"
+import axiosBlogInstance from "../../api/AxiosBlogInstance"
+
 export default function PostComponent() {
-    const BlogApiUrl = import.meta.env.VITE_POST_API_URL
     const { postId } = useParams()
     const [post, setPost] = useState<Post>( {
         category: "",
@@ -28,7 +29,7 @@ export default function PostComponent() {
     })
     const [loading, setLoading] = useState(true)
     useEffect(() => {
-        axios.get(`${BlogApiUrl}/posts/${postId}`).then(
+        axiosBlogInstance.get(`/posts/${postId}`).then(
             response => {
                 if (response.data.status) {
                     console.log(response.data.data)

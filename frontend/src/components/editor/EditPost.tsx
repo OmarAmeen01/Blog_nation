@@ -7,6 +7,7 @@ import Button from '../common/button';
 import InputComponet from '../common/inputComponet';
 import { useNavigate,useParams} from 'react-router-dom';
 import {  InputData, Post } from '../../typescript/interfaces';
+import axiosBlogInstance from '../../api/AxiosBlogInstance';
 // always initialise in useEffect hook
  
 
@@ -26,7 +27,7 @@ useEffect(()=>{
   
   if(!editorReff.current){
 
-   axios.get(`${BlogApiUrl}/posts/${postId}`).then(res=>{
+   axiosBlogInstance.get(`/posts/${postId}`).then(res=>{
   
     if(res.data.status){
          const data:Post = res.data.data
@@ -59,7 +60,6 @@ useEffect(()=>{
             onChange:async ()=>{
               const output= await editor.save()
               setContent(output)
-              console.log(content)
               }
             })
  
@@ -92,7 +92,7 @@ useEffect(()=>{
        }
        
      try {
-      const response= await axios.put(`${BlogApiUrl}/addpost/${postId}`,postDetails,{withCredentials:true})
+      const response= await axiosBlogInstance.put(`/addpost/${postId}`,postDetails,{withCredentials:true})
     if(response.data.status){
       setSendingResponse(false)
       handleVisibility(),

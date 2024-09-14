@@ -10,7 +10,6 @@ import tick from "../../assets/file-tick-svgrepo-com.svg"
 import { Comments } from "../../typescript/interfaces"
 import twitter from "../../assets/twitter-color-svgrepo-com.svg"
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { User } from "../../typescript/interfaces"
 import { Store } from "../../typescript/interfaces"
 import { useSelector,useDispatch } from "react-redux"
@@ -18,7 +17,8 @@ import hasUserLiked from "../../helper/hasUserLiked"
 import { setIsFormVisible, setIsSigninClicked } from "../../store/authSlice"
 import CommentComponet from "./comment/comments"
 import { validateNotification } from "mediumvalidate"
-
+import axiosBlogInstance from "../../api/AxiosBlogInstance"
+import axiosUserInstance from "../../api/AxiosUserInstance"
 
 
 export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) {
@@ -51,7 +51,6 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
    const [likeCount,setLikeCount] = useState<number>()
   const [isTextCopied,setTextCopied]= useState(false)
   const [isReponseSend,setResponseSend] = useState(false)
-  const userApiUrl = import.meta.env.VITE_USER_API_URL
   const [notification,setNotification] = useState<validateNotification>({
    
    user_id:"",
@@ -62,7 +61,6 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
  msg:"Liked your Post"
  })
 
-   const blogUrl = import.meta.env.VITE_POST_API_URL
    const userDetails = useSelector<Store>(state=>state.auth.userData)
    const loginStatus = useSelector<Store>(state=>state.auth.status) as boolean
    const  formVisible = useSelector<Store>(state=>state.auth.isFromVisible) as boolean
@@ -71,7 +69,7 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
    const {id}= userDetails as User
    const dispatch = useDispatch()
   useEffect(()=>{
-   axios.get(`${blogUrl}/likes/${postId}`,{withCredentials:true}).then(res=>{
+   axiosBlogInstance.get(`/likes/${postId}`,{withCredentials:true}).then(res=>{
        if(res.data.status){
          const likes = res.data.data
           setIsLikeClicked(hasUserLiked(likes,id))
@@ -84,7 +82,7 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
 
   useEffect(() => {
 
-   axios.get(`${blogUrl}/comments/${postId}`, { withCredentials: true }).then(res => {
+   axiosBlogInstance.get(`/comments/${postId}`, { withCredentials: true }).then(res => {
      if (res.data.status) {
        setComments(res.data.data)
        setTotalComments(res.data.data.length)
@@ -104,7 +102,7 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
    const newLikeState = !isLikeClicked
    setIsLikeClicked(newLikeState)
        if (newLikeState) { 
-          axios.post(`${blogUrl}/like/${postId}`, {}, {
+          axiosBlogInstance.post(`/like/${postId}`, {}, {
              withCredentials: true
           }).then(res => {
             
@@ -127,7 +125,7 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
              console.log(error)
           })
        } else {
-          axios.delete(`${blogUrl}/like/${postId}`, { withCredentials: true }).then(res => {
+          axiosBlogInstance.delete(`/like/${postId}`, { withCredentials: true }).then(res => {
              console.log(res)
              if (res.data.status) {
                 setIsLikeClicked(prev=>!prev)
@@ -140,7 +138,7 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
    }
 
 useEffect(()=>{
-   isReponseSend&& axios.post(`${userApiUrl}/notification`,notification,{withCredentials:true}).then(res=>{
+   isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
       console.log(res)
     })
 },[isReponseSend])
