@@ -18,8 +18,7 @@ export const userRouter = new Hono<{
 
 
 
-// note here use middleware here first so it can be in any route
-// userRouter.use(authMiddleware)
+
 
 /// note her  how are cors handled and how to send cookie from server and store it in browser with ease
 
@@ -29,10 +28,6 @@ userRouter.use('*', cors({
     credentials:true,
     allowHeaders: ['Content-Type', 'Authorization'] 
 }));
-
-//types
-type data = { [key: string]: string | Uint8ClampedArray }  // used to used dynamic properties to data object on populating it using populatedata
-
 
 
 async function hashPassword(password: string): Promise<string> {
@@ -44,6 +39,7 @@ async function hashPassword(password: string): Promise<string> {
     
     return hashedPassword;
 }
+
 userRouter.post("/signup", async (c) => {
     const JWT_PASSWORD  = c.env.JWT_PASSWORD
     const DATABASE_URL= c.env.DATABASE_URL;
@@ -156,8 +152,6 @@ userRouter.post("/signup", async (c) => {
     }
 })
 userRouter.post("/signin", async (c) => {
-    //env
-    //  const JWT_PASSWORD = c.env.JWT_PASSWORD
      const DATABASE_URL= c.env.DATABASE_URL
    const  JWT_PASSWORD  =c.env.JWT_PASSWORD
 
@@ -251,7 +245,6 @@ userRouter.post("/signin", async (c) => {
 })
 
 userRouter.delete("/delete_user", authMiddleware, async (c) => {
-    // const COOKIE_SECRET =c.env.COOKIE_SECRET
     const DATABASE_URL= c.env.DATABASE_URL
 
     const cookie = getCookie(c, "authorization") as string
@@ -569,7 +562,7 @@ userRouter.get("/login_status",async(c)=>{
  const cookie = getCookie(c,"authorization")
  if(cookie){
     const jwtToken = decode(cookie) 
-       const {email,userId} = jwtToken.payload
+       const {email} = jwtToken.payload
        
        try {
          
@@ -764,7 +757,7 @@ userRouter.post('/notification',authMiddleware,async(c)=>{
 }
 )
 
-// long pooling implementation take notes here
+
 
 userRouter.get('/notifications',authMiddleware,async(c)=>{
     const DATABASE_URL= c.env.DATABASE_URL

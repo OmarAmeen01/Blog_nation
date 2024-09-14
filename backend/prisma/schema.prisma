@@ -22,7 +22,7 @@ model User {
   first_name String? 
   last_name String?
   password String
-  image String?        // note Bytes data type is used to store images videos in through prisma which is converted to respective jargon in the rescpective db
+  image String?       
   pronoun String?
   domain String?
   un_watched Int?

@@ -10,8 +10,8 @@ const app = new Hono<
   }
 }>()
 app.use('*', cors({
-  origin: 'http://localhost:5173', // Allow requests from this origin
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+  origin: 'http://localhost:5173', 
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials:true,
   allowHeaders: ['Content-Type', 'Authorization'] 
 }));

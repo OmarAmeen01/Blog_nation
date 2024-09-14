@@ -12,7 +12,6 @@ export const blogRouter  = new Hono<{
     }
 }>()
 
-// blogRouter.use(authMiddleware)
 blogRouter.use('*', cors({
     origin: 'http://localhost:5173', // Allow requests from this origin
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
@@ -20,11 +19,7 @@ blogRouter.use('*', cors({
     allowHeaders: ['Content-Type', 'Authorization'] 
 }));
 
-// secrets
-// const DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZTEwYzFiYzMtY2NkMy00NjViLWJhMjUtNGNmMmJlNTI1OGYwIiwidGVuYW50X2lkIjoiOWUyNzQ0MTBhMTI3YzY0YzM4Y2NlMDBhNWVmMWQxYmY0Mzk0MGMxNGVmOWM3YzQyYTk4MzRiMmE3YzEyZDNjZCIsImludGVybmFsX3NlY3JldCI6IjgwNTA4YjMyLTA0NjktNGYxMi1iNmFhLTYwOWYxMWYyNTRjZSJ9.OkLm_nAKQzSzfZI_qxiBlerrMYFwLX_eprlaCWxQCYU"
 
-
-// get all posts of the user
 blogRouter.get("/dashboard",authMiddleware,async(c)=>{   
     const DATABASE_URL =c.env.DATABASE_URL
     const cookie = getCookie(c,"authorization") as string
