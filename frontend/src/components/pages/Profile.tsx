@@ -1,11 +1,8 @@
-import formatDate from "../../helper/dateConverter"
-import InteractionPanel from "../common/InteractionPanel"
-import AdmimEditPannel from "../common/adminEditPannel"
 import { Post, ProfileDetails, Store, User } from "../../typescript/interfaces"
 import { useState,useEffect } from "react"
 import ProfilePic from "../../assets/profile.png"
 import Edit from "../../assets/pencil-svgrepo-com.svg"
-import axios from "axios"
+
 import { Link } from "react-router-dom"
 import DashboardSkeletonLoader from "../common/loaders/skeltonLoaderDashboard"
 import ProfileForm from "../common/profile/profileFom"
@@ -115,7 +112,7 @@ export default function Profile(){
              <h4 className="text-3xl font-semibold p-2">Activity</h4>
             {isLoading?<DashboardSkeletonLoader/> :posts.length===0? userDetails.id===id?<div><h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on <Link to="/addpost" className="text-sky-500 hover:opacity-70 hover:underline underline-offset-4">Write</Link> </h4></div>:<h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on </h4> : <div id="posts" className="px-4 lg:px-14">
      {posts.map(post => {
-    return (<ListPost post={post}/>
+    return (<ListPost key={post.id} post={post}/>
     ) 
   })
 

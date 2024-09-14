@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import Bell from  "../../assets/bell.svg"
 import Profile  from "../../assets/profile.png"
 import formatDate from "../../helper/dateConverter"
-import { Noti, Notification } from "../../typescript/interfaces"
+import {  Notification } from "../../typescript/interfaces"
 import { Store } from "../../typescript/interfaces"
 import { Link } from "react-router-dom"
 import { useSelector,useDispatch} from "react-redux"
 import notificationFilter from "../../helper/notificationFilter"
-import { setWatched } from "../../store/notiSlice"
+import { setUnWatched } from "../../store/notiSlice"
 import axiosUserInstance from "../../api/AxiosUserInstance"
 
 export default function NotificationCenter(){
@@ -23,14 +23,11 @@ type Obj ={[key:string]:boolean}
 useEffect(()=>{
     setNotifications(notificationFilter(notificationSettings,notificationsState))
    },[notificationsState])
-   console.log(notifications,"notifications")
 
 function handleVisibility(){
    setBellClicked(prev=>!prev)
-   dispatch(setWatched(0))
-   axiosUserInstance.put(`/Watched`,{ watched:notifications.length},{withCredentials:true}).then(res=>{
-      console.log(res)
-   })
+   dispatch(setUnWatched(0))
+   axiosUserInstance.put(`/Watched`,{ watched:notifications.length},{withCredentials:true})
 }
 
     return <div className="py-2 pr-4 ">
@@ -45,7 +42,7 @@ function handleVisibility(){
        {notifications.length===0?<div><p className="text-xl text-center font-semibold text-gray-400  p-4 ">
           It looks empty here 
          </p></div>:notifications.map(notification=>{
-         return <div>
+         return <div key={notification.timestamp}>
 
      
          <Link to={`/post/${notification.post_id}`} >
@@ -57,7 +54,7 @@ function handleVisibility(){
          <p className="text-sm text-gray-500 p-2 ">{formatDate(notification.timestamp).formattedDate}</p>
       </div>
          </Link>
-         <div id="overlay " className="absolute border-2 border-black top-0 -left-[60rem] -z-10 w-[400%] h-[105vh]" onClick={handleVisibility}></div>
+         <div id="overlay " className="absolute  top-0 -left-[60rem] -z-10 w-[400%] h-[105vh]" onClick={handleVisibility}></div>
          </div>
        })}
         

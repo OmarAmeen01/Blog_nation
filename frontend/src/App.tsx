@@ -6,14 +6,12 @@ import Footer from './components/common/footer'
   import { authenticate } from './store/authSlice'
   import { useDispatch} from 'react-redux'
 import { useEffect , useState} from 'react'
-import { setNotifications, setWatched } from './store/notiSlice'
+import { setNotifications, setUnWatched } from './store/notiSlice'
 import { setNotiStates } from './store/notiSlice'
 import HomeLoader from './components/common/loaders/homeLoader'
-import axiosBlogInstance from './api/AxiosBlogInstance'
 import axiosUserInstance from './api/AxiosUserInstance'
 function App() { 
  const [isLoading,setIsLoading]= useState(true)
- const [isError,setIsError]= useState(false)
  const [newNotifications,setNewNotifications] = useState([])
  const [getNotificationsState,setGetNotificationState] = useState(false)
  const [newNotiArrived,setNewNottiArrived] = useState(false)
@@ -27,9 +25,7 @@ useEffect(()=>{
     dispatch(authenticate([response.data.status, response.data?.data]))
   }
  }).catch(error=>{
-  console.log(error)
   setIsLoading(false)
-  setIsError(true)
  })
   
 
@@ -51,7 +47,6 @@ const signal = controller.signal;
          })
     
     } catch (error) {
-     console.log(error)
     }
    }
   
@@ -91,25 +86,20 @@ useEffect(()=>{
       axiosUserInstance.get(`/unWatch`,{withCredentials:true} ).then(res=>{
         const unWatched = res.data.data.un_watched
         const watched = res.data.data.watched
-        console.log(newNotifications,"naya mal equal to garam mall")
         if(unWatched===null && watched===0){
     
           const unWatchedNotifications=newNotifications.length
          
-          dispatch(setWatched(unWatchedNotifications))
-          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true}).then(res=>{
-            console.log(res)
-          })
+          dispatch(setUnWatched(unWatchedNotifications))
+          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true})
           
         }else{
           
           if(newNotifications.length>unWatched){
             const unWatchedNotifications= newNotifications.length-watched +unWatched
-            dispatch(setWatched(unWatchedNotifications))
+            dispatch(setUnWatched(unWatchedNotifications))
             axiosUserInstance.put(`/unWatch`,{
-              un_watched:unWatchedNotifications},{withCredentials:true}).then(res=>{
-              console.log(res)
-            })
+              un_watched:unWatchedNotifications},{withCredentials:true})
           }else{
 
           }
@@ -119,10 +109,8 @@ useEffect(()=>{
     }else{
        const unWatchedNotifications=newNotifications.length
          
-          dispatch(setWatched(unWatchedNotifications))
-          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true}).then(res=>{
-            console.log(res)
-          })
+          dispatch(setUnWatched(unWatchedNotifications))
+          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true})
     }
     
     },[newNotiArrived])

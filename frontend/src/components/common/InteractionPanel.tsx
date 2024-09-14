@@ -32,7 +32,11 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
            img:whatsapp
         },
       {    name:"facebook",
-           link:`https://www.facebook.com/sharer/sharer.php?u=http://localhost:5173:/post/${postId}"`,
+           link:`http://www.facebook.com/dialog/feed?  
+app_id=123050457758183&
+&description=Check%20out%20my%20post%20here:-&
+message=Facebook%20Dialogs%20are%20so%20easy!&
+redirect_uri=http://www.example.com/response`,
            img:facebook
         },
      {     name:"twitter",
@@ -88,7 +92,6 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
        setTotalComments(res.data.data.length)
      }
    }).catch(error => {
-     console.log(error)
    })
  }, [updateComponent])
 
@@ -122,25 +125,20 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
              
              }
           }).catch(error => {
-             console.log(error)
           })
        } else {
           axiosBlogInstance.delete(`/like/${postId}`, { withCredentials: true }).then(res => {
-             console.log(res)
              if (res.data.status) {
                 setIsLikeClicked(prev=>!prev)
              }
           }).catch(error => {
-             console.log(error)
           })
        }
   }
    }
 
 useEffect(()=>{
-   isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
-      console.log(res)
-    })
+   isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true})
 },[isReponseSend])
    function handleCommentClick(){
  if(!loginStatus){
@@ -165,7 +163,7 @@ useEffect(()=>{
      {isCommentClicked&& <CommentComponet ownerId={ownerId} comments={comments} postId={postId} updateComponent={handleComponentUpdate} isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>}
       <button className="hover:opacity-60 flex gap-1 " onClick={handleCommentClick}>
          <img src={commet} className="h-6 w-6 hover:opacity-60" alt="" title="Comment" />
-         <p id="like" className="text-gray-500">{totalComments}</p>
+         <p id="comment" className="text-gray-500">{totalComments}</p>
       </button>
     
           {isShareClicked&&
@@ -176,7 +174,8 @@ useEffect(()=>{
             <div className="absolute z-20  bottom-9 bg-gray-200  shadow-3xl border-2 rounded-lg flex flex-col">
             <h4 className="text-center text-lg font-bold p-2">Share On</h4><div id="links" className="flex p-2  gap-3 flex-row">
           {ShareLinks.map(link=>{
-          return   <a href={link.link} title={`share on ${link.name}`} target="_blank" ><img src={link.img} className="h-6 w-6 transition-all duration-200 ease-in-out  hover:-translate-y-1 hover:scale-105"  alt={link.name} /></a>
+          return   <a href={link.link}  key={link.link}
+          title={`share on ${link.name}`} target="_blank" ><img src={link.img} className="h-6 w-6 transition-all duration-200 ease-in-out  hover:-translate-y-1 hover:scale-105"  alt={link.name} /></a>
           })}  
 
           <button  onClick={()=>{

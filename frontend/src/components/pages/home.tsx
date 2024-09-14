@@ -29,7 +29,7 @@ const [categoryName,setCategoryName] =useState("")
     const response = await axiosBlogInstance.get(`/posts`)
 
     if(response.data.status){
-      console.log(response.data.data)
+
      dispatch(setPosts([true, response.data.data]))
      setblogPosts(response.data.data)
      setIsLoading(false)
@@ -37,7 +37,7 @@ const [categoryName,setCategoryName] =useState("")
    }
  getPost()
     } catch (error) {
-      console.log(error)
+
     }
 
 
@@ -92,8 +92,8 @@ const [categoryName,setCategoryName] =useState("")
 }
 
 
-{isLoading?<DashboardSkeletonLoader/>: <section id="posts" className=" mt-3 rounded-lg mb-3 flex gap-3">
-        <article id="postDetail" className="">
+{isLoading?<DashboardSkeletonLoader/>: <section id="posts" className=" mt-3 rounded-lg mb-3 flex justify-between gap-3">
+        <article id="postDetail" className="w-full rounded-lg">
       <div id="heading" className="flex gap-4  p-2 rounded-lg  border-b ">            
          <p className="text-xl font-semibold font-mono p-2  md:text-2xl bg-white w-full rounded-lg">Featured posts</p>
           </div>
@@ -103,16 +103,16 @@ const [categoryName,setCategoryName] =useState("")
 
    {isCategoryCliked?sortPosts(blogPosts,categoryName).map(post=>{
         return(
-          <ListPost post={post}/>
+          <ListPost key={post.id} post={post}/>
         )
        })
        : blogPosts.map(post => {
-            return (<ListPost post={post}/> ) 
+            return (<ListPost key={post.id} post={post}/> ) 
           })} 
 
    </div>
 </article>
-        <aside id="category" className="rounded-lg hidden min-w-72 p-4 lg:block bg bg-[rgba(0,0,0,0.1)]">
+        <aside id="category" className="rounded-lg hidden min-w-72 max-w-80 p-4 lg:block bg bg-[rgba(0,0,0,0.1)]">
       <h4 className=" text-xl font-bold p-2 mb-4">Recommended Topics</h4>
               
             <div id="category-buttons" className=" ">
@@ -120,7 +120,7 @@ const [categoryName,setCategoryName] =useState("")
                 setCategoryClicked(false)
               }}>All</button>
           {isLoading?<p>loading</p>:uniqueCategoryFilter(blogPosts).map(category => {
-            return <button id={category} className="bg-white text-lg font-mono p-3 rounded-3xl hover:scale-110 transition-all duration-200 hover:placeholder-opacity-80  m-1" onClick={()=>{
+            return <button key={category} id={category} className="bg-white text-lg font-mono p-3 rounded-3xl hover:scale-110 transition-all duration-200 hover:opacity-80  m-1 " onClick={()=>{
               setCategoryClicked(true),
               setCategoryName(category)
             }}>{category}</button>

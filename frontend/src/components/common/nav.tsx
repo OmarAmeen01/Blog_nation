@@ -13,7 +13,7 @@ import { useState } from "react"
 import NotificationCenter from "./NotificationCenter"
 const navLinks = [
     {
-        path: "/our_story",
+        path: "/explore_features",
         name: "Explore Features"
     },
 ]
@@ -50,7 +50,7 @@ export default function Nav({ className }: { className?: string }) {
                 <div className="flex  ">
                     <div className={` gap-6 text-sm hidden lg:flex border-black py-4 px-4  ${className} `}>
                         {navLinks.map(link => {
-                            return <Link to={link.path} className="  font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
+                            return <Link key={link.path} to={link.path} className="  font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
 
 
                         })}

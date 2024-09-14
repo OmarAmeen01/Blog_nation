@@ -75,12 +75,10 @@ useEffect(()=>{
         content:content,
         category:modifiedCategory,
        }
-       console.log(postDetails)
      try {
       const  response= await axiosBlogInstance.post(`/addpost`,postDetails,{withCredentials:true})
     if(response.data.status){
      const data= response.data.data
-     console.log(data)
       setNotification(prev=>({
         ...prev,
         type:"post_uploads",
@@ -97,7 +95,6 @@ useEffect(()=>{
     }
       
      } catch (error) {
-      console.log(error)
       setSendingResponse(false)
      }
        
@@ -111,7 +108,6 @@ useEffect(()=>{
   
     useEffect(()=>{
       isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
-         console.log(res)
          navigate("/dashboard")
        })
    },[isReponseSend])

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import DashboardSkeletonLoader from "../common/loaders/skeltonLoaderDashboard"
@@ -32,7 +31,6 @@ export default function PostComponent() {
         axiosBlogInstance.get(`/posts/${postId}`).then(
             response => {
                 if (response.data.status) {
-                    console.log(response.data.data)
                     setPost(response.data.data)
                     setLoading(false)
                 }
@@ -58,7 +56,7 @@ export default function PostComponent() {
      </article>
         <article id="post" className="p-3">
              {post.content[0].blocks.map(block=>{
-                return  <div>
+                return  <div key={block.id}>
                        <p className={`${block.type==="header"?"text-2xl font-bold ":"font-lg"} p-2`}>
                          {block.data.text}
                        </p>

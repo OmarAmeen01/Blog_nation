@@ -100,7 +100,6 @@ useEffect(()=>{
     }
       
      } catch (error) {
-      console.log(error)
       setSendingResponse(false)
      }
        

@@ -140,12 +140,12 @@ about:e.target.value
 
 pronoun:e.target.value
 }))} name="Pronoun" id="pronoun" className="rounded-lg Text text-sm text-gray-500   md:text-lg  p-2 outline-0 border-2 w-full my-3 ">
-    <option value="" disabled selected>Pronoun</option>
+    <option value="" disabled defaultValue={"He/Him"}>Pronoun</option>
     <option value="He/Him">He/Him</option>
     <option value="She/Her">She/Her</option>
     <option value="Them/They">Them/They</option>
   </select>
-  {Error.isError&&  <p className="text-red-500 p-2 bg-red-400 text-sm">{Error.error}</p>}
+  {Error.isError&&  <p className=" p-2 bg-[rgba(228,104,104,0.5)] text-sm my-2 font-semibold">{Error.error}</p>}
       <Button onClick={handleSubmit} name={sendingResponse?"Wait...":"Submit"} disabled={sendingResponse?true:false} className="w-full md:text-lg"/>
      </form>
       

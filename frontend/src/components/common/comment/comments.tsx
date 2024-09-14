@@ -61,9 +61,9 @@ updateComponent()
   }
 
   useEffect(()=>{
-    console.log(notification)
+
    sentresponse&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
-      console.log(res)
+
     })
   },[sentresponse])
   return<>
