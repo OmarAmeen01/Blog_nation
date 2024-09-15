@@ -107,7 +107,10 @@ useEffect(()=>{
     }
   
     useEffect(()=>{
-      isReponseSend&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
+      isReponseSend&& axiosUserInstance.post(`/notification`,
+        notification,{withCredentials:true}).then(
+           //@ts-ignore
+          res=>{
          navigate("/dashboard")
        })
    },[isReponseSend])

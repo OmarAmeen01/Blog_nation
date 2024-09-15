@@ -1,6 +1,5 @@
  import { Link, useNavigate } from "react-router-dom"
  import { Store, User } from "../../typescript/interfaces"
- import axios from "axios"
  import { unAuthenticate } from "../../store/authSlice"
  import { useDispatch, useSelector} from "react-redux"
  import setting from "../../assets/settings.svg"

@@ -82,12 +82,14 @@ export default function Signup() {
                     
                     }
                     setError(prevState=>({
+                        ...prevState,
                         isError:true,
                         error:response.data.msg
                     }))
                     setSendingResponse(false)
                 } catch (error) {
                     setError(prevState => ({
+                        ...prevState,
                         isError: true,
                         error: "Server didn't respond try again later"
                     }))

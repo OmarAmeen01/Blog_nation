@@ -29,11 +29,13 @@ function handleSubmit(e:React.FormEvent){
       handleToggle()
       window.location.reload()
       setSendingResponse(false)
+      //@ts-ignore
       setError(prev=>({
         error:"",
         isError:false
       }))
     }else{
+         //@ts-ignore
       setError(prev=>({
         error:response.data.msg,
         isError:true,
@@ -41,6 +43,7 @@ function handleSubmit(e:React.FormEvent){
       setSendingResponse(false)
     }
   }).catch(error=>{
+       //@ts-ignore
     setError(prev=>({
       error:error,
       isError:true,

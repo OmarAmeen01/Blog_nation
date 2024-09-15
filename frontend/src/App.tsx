@@ -25,6 +25,7 @@ useEffect(()=>{
     dispatch(authenticate([response.data.status, response.data?.data]))
   }
  }).catch(error=>{
+  console.log(error)
   setIsLoading(false)
  })
   
@@ -33,7 +34,6 @@ useEffect(()=>{
 },[window.navigator.onLine])
  useEffect(()=>{
    const controller = new AbortController(); 
-const signal = controller.signal;
   function getNotifications(){
     try {
      axiosUserInstance.get(`/notifications`, {withCredentials:true}).then(res=>{
@@ -95,14 +95,11 @@ useEffect(()=>{
           
         }else{
           
-          if(newNotifications.length>unWatched){
+        
             const unWatchedNotifications= newNotifications.length-watched +unWatched
             dispatch(setUnWatched(unWatchedNotifications))
             axiosUserInstance.put(`/unWatch`,{
               un_watched:unWatchedNotifications},{withCredentials:true})
-          }else{
-
-          }
           
           }
        })

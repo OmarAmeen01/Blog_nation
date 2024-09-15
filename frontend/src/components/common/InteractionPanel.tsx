@@ -95,7 +95,6 @@ redirect_uri=http://www.example.com/response`,
        setComments(res.data.data)
        setTotalComments(res.data.data.length)
      }
-   }).catch(error => {
    })
  }, [updateComponent])
 
@@ -128,14 +127,12 @@ redirect_uri=http://www.example.com/response`,
                setIsLikeClicked(res.data.status)
              
              }
-          }).catch(error => {
           })
        } else {
           axiosBlogInstance.delete(`/like/${postId}`, { withCredentials: true }).then(res => {
              if (res.data.status) {
                 setIsLikeClicked(prev=>!prev)
              }
-          }).catch(error => {
           })
        }
   }
@@ -183,6 +180,7 @@ useEffect(()=>{
           })}  
 
           <button  onClick={()=>{
+            //@ts-ignore
             navigator.clipboard.writeText(`http://localhost:5173:/post/${postId}`).then(text=>{
                setTextCopied(true)
             })

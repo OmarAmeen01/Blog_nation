@@ -26,8 +26,13 @@ useEffect(()=>{
         setIsLoading(false)
         setIsError(false)
     }
-    }).catch(
- error=>{
+
+  
+    }
+
+).catch(
+    //@ts-ignore
+ error=>{  
 
     setIsLoading(false)
     setIsError(true)

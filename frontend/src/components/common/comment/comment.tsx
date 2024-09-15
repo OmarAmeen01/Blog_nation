@@ -24,7 +24,9 @@ export default function Comment({ comment, handleComponentUpdate }: { comment: C
 
 
     function handleDelete() {
-        axiosBlogInstance.delete(`/delete_comment/${comment.post_id}/${comment.id}`, { withCredentials: true }).then(res => {
+ //@ts-ignore
+        axiosBlogInstance.delete(`/delete_comment/${comment.post_id}/${comment.id}`, { withCredentials: true }).then(res => {        
+            
             setOptionClicked(prev => !prev)
             handleComponentUpdate()
         })

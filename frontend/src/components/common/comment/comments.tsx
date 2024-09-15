@@ -3,7 +3,6 @@ import {  useEffect, useState } from "react"
 import { Store, User, Comments } from "../../../typescript/interfaces"
 import { useSelector } from "react-redux"
 import Button from "../button"
-import axios from "axios"
 import profile from "../../../assets/profile.png"
 import Comment from "./comment"
 import { validateNotification } from "mediumvalidate"
@@ -62,13 +61,11 @@ updateComponent()
 
   useEffect(()=>{
 
-   sentresponse&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true}).then(res=>{
-
-    })
+   sentresponse&& axiosUserInstance.post(`/notification`,notification,{withCredentials:true})
   },[sentresponse])
   return<>
   
-  <div id="overlay " className={`fixed ${isCommentClicked?"block":" opacity-0 hidden"}  bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[100%] h-[100%]`}onClick={handleToggle}></div>
+  <div id="overlay " className={`fixed ${isCommentClicked?"block":" opacity-0 hidden"}  bg-[rgba(0,0,0,0.51)] top-0 left-0 z-10 w-[100%] h-[100%]`}onClick={handleToggle}></div>
   <section id="comments" className={`fixed w-[95%] left-2 md:mdStyle overflow-y-scroll lg:lgStyle bg-white z-10 p-4 rounded-lg shadow-lg  transition-all duration-500   
     ${isCommentClicked?"top-20 opacity-1 ":"top-[30rem] opacity-0 md:left-[100%] "}`}>
 

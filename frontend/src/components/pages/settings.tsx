@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../common/button";
 import Switch from "../common/Switch";
 import { useSelector,useDispatch } from "react-redux";
 import { NotificationSettings, Store, User } from "../../typescript/interfaces";
 import ConfimationDailog from "../common/confirmationDailog";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { unAuthenticate } from "../../store/authSlice";
 import ChangePassword from "../auth/ChangePassword"
 import {  setNotiStates } from "../../store/notiSlice";

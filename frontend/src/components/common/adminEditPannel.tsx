@@ -1,8 +1,6 @@
 import { useEffect,useState } from "react"
-import axios from "axios"
 import threeDot from "../../assets/threeDots.svg"
 import verifyPostOwner from "../../helper/verifyPostOwner"
-
 import { Link } from "react-router-dom"
 import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import ConfimationDailog from "./confirmationDailog"
