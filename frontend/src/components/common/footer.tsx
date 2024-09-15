@@ -20,11 +20,6 @@ const footerLinks =[
         path:"/dashboard",
         name:"Dashboord",
     },
-    {
-        path:"/explore_features",
-        name:"Explore Features",
-    }
-    
 ]
 // note here how to declare inline type in typescript 
 export default function Footer({className}:{className?:string}){
@@ -45,8 +40,10 @@ export default function Footer({className}:{className?:string}){
          {footerLinks.map(link=>{
             return (
               loginStatus?  <Link key={link.name+link.path} to={link.path} className=" text-gray-700 ease-in-out  hover:underline hover:underline-offset-4 " >{link.name}</Link>:<button onClick={handleClick}>{link.name}</button>
+             
             )   
          })}
+          <Link to="/explore_features">Explore Features</Link>
         </div>
     )
 }
