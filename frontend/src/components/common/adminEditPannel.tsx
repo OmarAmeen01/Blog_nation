@@ -1,17 +1,16 @@
 import { useEffect,useState } from "react"
 import threeDot from "../../assets/threeDots.svg"
 import verifyPostOwner from "../../helper/verifyPostOwner"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import ConfimationDailog from "./confirmationDailog"
-
 export default function AdmimEditPannel({postId}:{postId:string}){
 const [isLoading,setIsLoading] =useState(true)
 const [isDeleteClicked,setIsDeletdClicked] = useState(false)
 const [isPannelClick,setIsPannelClicked] =useState(false)
 const [posts,setPosts] = useState([])
 
-
+const navigate = useNavigate()
 
 
     useEffect(()=>{
@@ -37,7 +36,7 @@ async function handleDeleteClick(postId:string){
         withCredentials:true
     })
     if(response.data.status){
-       window.location.reload()
+       navigate("/")
  }
 }
 
