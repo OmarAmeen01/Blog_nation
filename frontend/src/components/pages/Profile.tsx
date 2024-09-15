@@ -70,11 +70,11 @@ export default function Profile(){
 
    
               <div className="" >
-                <img src={profile?.cover_image?profile.cover_image:placeholder} alt="cover image" className=" w-full h-44 object-cover
+                <img src={profile?.cover_image?profile.cover_image:placeholder} alt="cover image" className=" w-full h-24 md:h-44 object-cover
                 border 
                 "/>
                 <img src={profile?.image?profile.image:ProfilePic} alt=""
-                  className="rounded-full border-2 border-black md:w-32 w-28 h-28 md:h-32 absolute top-28  left-6 md:left-[4.5rem]" id="profile" /> 
+                  className="rounded-full border-2 border-black md:w-32 w-24 h-24 md:h-32 absolute top-12 md:top-28  left-6 md:left-[4.5rem]" id="profile" /> 
                <div id="Name and Edit pannel" className="pt-16 pb-4 flex justify-between">
                               
                 <div id="name" className="p-2 gap-2  flex">

@@ -46,7 +46,7 @@ export default function Nav({ className }: { className?: string }) {
 
 
         <>
-            <nav className="border-b-2 bg-white relative border-black flex  justify-between  px-4 lg:px-16">
+            <nav className="border-b-2 bg-white relative border-black flex  justify-between py-2 px-4 lg:px-16">
                 <Link to="/" className="text-lg md:text-2xl lg:text-3xl font-extrabold py-2">BlogNation</Link>
                 <div className="flex  ">
                     <div className={` gap-6 text-sm hidden lg:flex border-black py-4 px-4  ${className} `}>
