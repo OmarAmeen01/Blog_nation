@@ -39,9 +39,12 @@ function handleVisibility(){
     
     <div id="notifications" className="absolute bg-white right-4 z-20 p-4 shadow-xl rounded-lg my-4">
      
-       {notifications.length===0?<div><p className="text-xl text-center font-semibold text-gray-400  p-4 ">
+       {notifications.length===0?<div>
+         <div><p className="text-xl text-center font-semibold text-gray-400  p-4 ">
           It looks empty here 
-         </p></div>:notifications.map(notification=>{
+         </p></div>
+         <div id="overlay " className="absolute  top-0 -left-[60rem] -z-10 w-[400%] h-[105vh]" onClick={handleVisibility}></div>
+       </div>:notifications.map(notification=>{
          return <div key={notification.timestamp}>
 
      

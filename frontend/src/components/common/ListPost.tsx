@@ -8,7 +8,7 @@ export default function ListPost({post}:{post:Post}){
 <div className="   p-2 w-full" id="post desc">
 <Link to ={`/profile/${post.user_id}`}> 
    <div id="author" className="flex relative" title="Go to Profile">
- <img src={post.user.image} className="rounded-full  border=-black border h-3 w-6 md:h-12 md:w-12" alt="" />
+ <img src={post.user.image} className="rounded-full  border=-black border h-9 w-9 md:h-12 md:w-12" alt="" />
  <p className="text-gray-500 text-sm p-2 md:text-lg font-semibold">{post.user.first_name} {post.user.last_name}</p>
  </div>
  </Link>
