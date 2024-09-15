@@ -22,6 +22,7 @@ import axiosUserInstance from "../../api/AxiosUserInstance"
 
 
 export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) {
+   const Facebook_app_id = import.meta.env.VITE_FACEBOOK_APP_ID
    const ShareLinks =[
       {     name:"linkedin",
            link:`https://www.linkedin.com/shareArticle?mini=true&url=https://yourwebsite.com&title=This%20post%20was%20created%20using%20my%20own%20website!&summary=Check%20it%20out%20here&source=http://localhost:5173` ,
@@ -33,8 +34,11 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
         },
       {    name:"facebook",
            link:`http://www.facebook.com/dialog/feed?  
-app_id=123050457758183&
-&description=Check%20out%20my%20post%20here:-&
+app_id=${Facebook_app_id}&  
+link=https://www.google.com&  
+name=Facebook%20Dialogs&  
+caption=Post%20Link& 
+description=Dialogs%20provide%20a%20simple,%20consistent%20interface%20for%20applications%20to%20interact%20with%20users.&
 message=Facebook%20Dialogs%20are%20so%20easy!&
 redirect_uri=http://www.example.com/response`,
            img:facebook

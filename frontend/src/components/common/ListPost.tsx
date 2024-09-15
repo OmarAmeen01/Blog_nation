@@ -14,10 +14,10 @@ export default function ListPost({post}:{post:Post}){
  </Link>
  <Link to={`/post/${post.id}`}> 
  <div  title="Go to Post">
-   <h4 className="text-2xl font-bold p-2 md:text-3xl">{post.content[0].blocks[0]?.data.text}</h4>
+   <h4 className="text-2xl font-bold p-2 md:text-3xl">{post.content[0].blocks[0]?.data.text} ...</h4>
    <p className="text-gray-500 text-sm  p-2 md:tex-lg">{formatDate(post.created_at).timeAgo}</p>
 
-   <p className=" p-2 md:text-xl">{post.content[0].blocks[1]?.data.text.slice(0,135)}</p>
+   <p className=" p-2 md:text-xl">{post.content[0].blocks[1]?.data.text.slice(0,135)}...</p>
    </div>
    </Link>
    <div className="flex justify-between relative "> <InteractionPanel postId={post.id} ownerId={post.user_id}/> <AdmimEditPannel postId={post.id}/></div>

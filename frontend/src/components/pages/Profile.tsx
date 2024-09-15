@@ -26,7 +26,6 @@ export default function Profile(){
         
       
    axiosUserInstance.get(`/profile/${id}`).then(response=>{
-
     if(response.data.status){
       setProfile(response.data.data)
      setIsLoading(false)
@@ -39,7 +38,7 @@ export default function Profile(){
    setIsLoading(false)
    })
 
-   axiosBlogInstance.get(`/dashboard`,{withCredentials:true}).then(response=>{
+   axiosBlogInstance.get(`/dashboard/${id}`,{withCredentials:true}).then(response=>{
     if(response.data.data){
         setPosts(response.data.data.slice(0,2))
         setIsLoading(false)
@@ -71,7 +70,7 @@ export default function Profile(){
 
    
               <div className="" >
-                <img src={profile?.cover_image?profile.cover_image:placeholder} alt="cover image" className=" w-full h-36 object-cover
+                <img src={profile?.cover_image?profile.cover_image:placeholder} alt="cover image" className=" w-full h-44 object-cover
                 border 
                 "/>
                 <img src={profile?.image?profile.image:ProfilePic} alt=""

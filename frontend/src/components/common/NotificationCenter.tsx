@@ -49,7 +49,7 @@ function handleVisibility(){
             <div className="flex gap-5 p-4 border-b-2  justify-between">
          <div id="user" className="flex gap-4">
          <img src={Profile} className="rounded-full  h-9 w-9 hover:contrast-50" alt="profile" />
-         <p className="text-lg p-2"><span className="font-semibold">{notification.user.first_name}</span> {notification.msg}</p>
+         <p className="text-lg p-2"><span className="font-semibold">{notification.type==="post_uploads"?"You":notification.user.first_name}</span> {notification.msg}</p>
          </div>
          <p className="text-sm text-gray-500 p-2 ">{formatDate(notification.timestamp).formattedDate}</p>
       </div>

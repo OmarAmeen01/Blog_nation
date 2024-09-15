@@ -111,7 +111,95 @@ return c.json({
  
 })
 
-// get a specific post 
+// get a specific users post 
+blogRouter.get("/dashboard/:id",authMiddleware,async(c)=>{   
+    const DATABASE_URL =c.env.DATABASE_URL
+    const userId = c.req.param("id")
+
+try {
+
+    const prisma = new PrismaClient({
+        datasourceUrl:DATABASE_URL
+    }).$extends(withAccelerate())
+
+if(typeof userId==="string"){
+
+
+    const posts =await prisma.post.findMany({
+       where:{user_id:userId},
+       include:{
+        content:true,
+         likes:{
+            include:{
+                user:{
+                    select:{
+                        first_name:true,
+                        last_name:true,
+                        image:true,
+                    }
+                }
+            }
+         },
+         comments:{
+            include:{
+                user:{
+                    select:{
+                        first_name:true,
+                        last_name:true,
+                        image:true,
+                    }
+                }
+            }
+         },
+         images:true,
+         user:{
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                image:true
+            }
+        }
+       }
+    })
+    if(posts.length>0){
+ 
+        return c.json({
+            msg:"Founded posts",
+            data:posts,
+            authentication:true,
+            status:true
+        },200)
+       }else{
+        return c.json({
+            msg:"no posts not found",
+            authenticaion:true,
+            status:false
+        })
+       }
+}
+
+return c.json({
+    msg: "You don't have access to  perform these tasks",
+    authentication: false,
+    status:false
+})
+
+
+  
+
+
+} catch (error) {
+    console.log(error)
+    return c.json({msg:"something went wrong ",
+        authentication:true,
+        status:false
+    })
+}
+
+  
+ 
+})
 
 
 blogRouter.get("/posts/:postid",async(c)=>{
