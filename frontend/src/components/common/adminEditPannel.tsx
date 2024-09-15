@@ -36,7 +36,8 @@ async function handleDeleteClick(postId:string){
         withCredentials:true
     })
     if(response.data.status){
-       navigate("/")
+      navigate("/")
+     window.location.reload()
  }
 }
 
