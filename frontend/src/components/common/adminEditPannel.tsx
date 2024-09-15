@@ -37,7 +37,11 @@ async function handleDeleteClick(postId:string){
     })
     if(response.data.status){
       navigate("/")
-     window.location.reload()
+  if(window.location.pathname==="/" || window.location.pathname==="/dashboard" || window.location.pathname==="/dashboard/:id"){
+    window.location.reload()
+  }else{
+    navigate("/")
+  }
  }
 }
 
