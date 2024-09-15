@@ -2,7 +2,6 @@
 import EditorJS, { OutputData, ToolConstructable } from '@editorjs/editorjs';
 import { useEffect,useRef, useState } from 'react';
 import Header from '@editorjs/header';
-import axios from 'axios';
 import Button from '../common/button';
 import InputComponet from '../common/inputComponet';
 import { useNavigate,useParams} from 'react-router-dom';
@@ -12,7 +11,6 @@ import axiosBlogInstance from '../../api/AxiosBlogInstance';
  
 
 export default function EditPost(){
-  const BlogApiUrl =import.meta.env.VITE_POST_API_URL
   const [sendingResponse,setSendingResponse] = useState(false)
   const[isSubmitCliked,setIsSubmitClicked] =useState(false)
   const [content,setContent] = useState< InputData | OutputData>()
