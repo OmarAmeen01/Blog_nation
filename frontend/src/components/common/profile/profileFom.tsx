@@ -8,7 +8,7 @@ export default function ProfileForm({profileDetails,shouldShow,handleToggle}:{pr
 const [profileInfo,setProfileInfo] = useState({
     first_name:profileDetails?.first_name ||"",
     last_name:profileDetails?.last_name ||"",
-    domain:profileDetails?.domain ||"https://www.omarameen.co",
+    domain:profileDetails?.domain ||"",
      image:profileDetails?.image ||"",
     pronoun:profileDetails?.pronoun ||"",
     about:profileDetails?.about||"",

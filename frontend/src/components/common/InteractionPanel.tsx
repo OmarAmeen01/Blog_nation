@@ -69,7 +69,7 @@ redirect_uri=http://www.example.com/response`,
  msg:"Liked your Post"
  })
 
-   const userDetails = useSelector<Store>(state=>state.auth.userData)
+   const userDetails = useSelector<Store>(state=>state.auth?.userData)
    const loginStatus = useSelector<Store>(state=>state.auth.status) as boolean
    const  formVisible = useSelector<Store>(state=>state.auth.isFromVisible) as boolean
    const  signinVisible = useSelector<Store>(state=>state.auth.isSigninClicked) as boolean

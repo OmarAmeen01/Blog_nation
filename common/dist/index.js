@@ -14,11 +14,11 @@ exports.signin_out = zod_1.default.object({
 exports.validateProfileDetails = zod_1.default.object({
     last_name: zod_1.default.string().max(25).optional(),
     first_name: zod_1.default.string().max(25).optional(),
-    domain: zod_1.default.string().url().optional(),
+    domain: zod_1.default.string().optional(),
     about: zod_1.default.string().min(50).optional(),
     pronoun: zod_1.default.string().max(10).optional(),
-    image: zod_1.default.string().url().optional(),
-    cover_image: zod_1.default.string().url().optional(),
+    image: zod_1.default.string().optional(),
+    cover_image: zod_1.default.string().optional(),
     domain_title: zod_1.default.string().max(50).optional()
 });
 exports.validatePost = zod_1.default.object({

@@ -56,7 +56,7 @@ export default function Profile(){
  }
     )
 
-    },[])
+    },[id])
   
 
 
@@ -118,7 +118,7 @@ export default function Profile(){
 }
 
 
-<div className=" bg-black rounded-xl p-2 text-white text-lg font-semibold transition-all duration-200 hover:scale-95 hover:opacity-85 flex justify-center "><Link to="/dashboard" className="w-full text-center">View more </Link></div>
+<div className=" bg-black rounded-xl p-2 text-white text-lg font-semibold transition-all duration-200 hover:scale-95 hover:opacity-85 flex justify-center "><Link to={`/dashboard/${id}`} className="w-full text-center">View more </Link></div>
  </div>}
  </article>
  

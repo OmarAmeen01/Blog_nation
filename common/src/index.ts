@@ -9,11 +9,11 @@ export const signin_out =z.object({
 export const validateProfileDetails = z.object({
 last_name:z.string().max(25).optional(),
 first_name:z.string().max(25).optional(),
-domain:z.string().url().optional(),
+domain:z.string().optional(),
 about:z.string().min(50).optional(),
 pronoun:z.string().max(10).optional(),
-image:z.string().url().optional(),
-cover_image:z.string().url().optional(),
+image:z.string().optional(),
+cover_image:z.string().optional(),
 domain_title:z.string().max(50).optional()
 })
 

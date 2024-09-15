@@ -1,0 +1,42 @@
+# Root-Level Configuration
+.DS_Store
+
+# Ignore all .env files, except for frontend
+.env
+.env.production
+.dev.vars
+
+# Node.js Dependencies and Build Files (common)
+common/node_modules/
+common/dist/
+
+# Backend Configuration (Cloudflare in backend)
+backend/node_modules/
+backend/dist/
+backend/.wrangler/
+backend/wrangler.toml
+
+# Frontend Configuration (React in frontend)
+frontend/node_modules/
+frontend/.env
+frontend/.env.production
+frontend/.dev.vars
+frontend/dist/
+
+# IDE Settings and Logs
+.vscode/
+!.vscode/launch.json
+!.vscode/*.code-snippets
+.idea/
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Yarn
+.yarn/
+!.yarn/releases
+
+# Miscellaneous
+.DS_Store

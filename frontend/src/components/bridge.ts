@@ -7,4 +7,5 @@ import Authenticator from "./common/authenticators/authenticator";
 import AddPost from "./editor/Addpost";
 import EditPost from "./editor/EditPost";
 import ExploreFeatures from "./pages/ExploreFeatures";
-export {Home,Settings,Dashboard,PostComponent,Profile,Authenticator,AddPost,EditPost,ExploreFeatures}
+import AllPosts from "./pages/AllPosts";
+export {Home,Settings,Dashboard,PostComponent,Profile,Authenticator,AddPost,EditPost,ExploreFeatures,AllPosts}

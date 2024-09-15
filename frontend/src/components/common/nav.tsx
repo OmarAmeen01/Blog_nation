@@ -5,7 +5,7 @@ import Button from "./button"
 import write from "../../assets/write.svg"
 import Signup from "../auth/signup"
 import { setIsFormVisible, setIsSignupClicked } from "../../store/authSlice"
-import { Store } from "../../typescript/interfaces"
+import { Store, User } from "../../typescript/interfaces"
 import DropDown from "./DropDown"
 import Profile from "../../assets/profile.png"
 import Signin from "../auth/signin"
@@ -24,6 +24,7 @@ const navLinks = [
 export default function Nav({ className }: { className?: string }) {
     //note here export the import the type of reducer as generic to useSelect function
     const status = useSelector<Store>(state => state.auth.status)
+    const userdata = useSelector<Store>(state=>state.auth.userData) as User
     const isFormVisible = useSelector<Store>(state => state.auth.isFromVisible) as boolean
     const isSignupClicked = useSelector<Store>(state => state.auth.isSignupClicked) as boolean
     const isSigninClicked = useSelector<Store>(state => state.auth.isSigninClicked) as boolean
@@ -50,7 +51,7 @@ export default function Nav({ className }: { className?: string }) {
                 <div className="flex  ">
                     <div className={` gap-6 text-sm hidden lg:flex border-black py-4 px-4  ${className} `}>
                         {navLinks.map(link => {
-                            return <Link key={link.path} to={link.path} className="  font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
+                            return <Link key={link.path} to= {link.path} className="  font-sans text-gray-700  hover:underline hover:underline-offset-4">{link.name}</Link>
 
 
                         })}
@@ -64,7 +65,7 @@ export default function Nav({ className }: { className?: string }) {
                             <NotificationCenter />
                             <button onClick={() => setIsProfileClicked(prev => !prev)
                             }>
-                                <img src={Profile} alt="profile" className=" rounded-full  h-9 w-9 hover:contrast-50" /></button>
+                                <img src={userdata.image?userdata.image:Profile } alt="profile" className=" rounded-full  h-9 w-9 hover:contrast-50" /></button>
                         </div>
                             : <Button name="Get started " className="" onClick={handleClick} />}
 

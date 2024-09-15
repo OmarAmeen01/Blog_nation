@@ -6,10 +6,11 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import {store} from "./store/store.ts"
-import { Dashboard,Home,Profile,Settings,AddPost,EditPost,Authenticator, ExploreFeatures } from './components/bridge.ts'
+import { Dashboard,Home,Profile,Settings,AddPost,EditPost,Authenticator, ExploreFeatures,AllPosts } from './components/bridge.ts'
 import PostComponent from './components/pages/post.tsx'
 import EditorAuthenticator from './components/common/authenticators/editorAuthenticator.tsx'
 import TooManyRequests from './components/common/status/TooManyRequests.tsx'
+
 const router = createBrowserRouter([
   {
     path:"/",
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path:"/explore_features",
         element: <ExploreFeatures/>
+      },
+      {
+        path:"/dashboard/:id",
+        element:<AllPosts/>
       }
     ]
   }
