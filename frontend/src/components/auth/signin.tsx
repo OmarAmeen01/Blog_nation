@@ -7,7 +7,6 @@ import Button from "../common/button"
 import axios from "axios"
 import { useDispatch, useSelector} from "react-redux"
 import { authenticate, setIsSigninClicked, setIsSignupClicked } from "../../store/authSlice"
-import { useNavigate } from "react-router-dom"
 import Signup from "./signup"
 import { setIsFormVisible } from "../../store/authSlice"
 import {Store} from  "../../typescript/interfaces"
@@ -17,8 +16,6 @@ import validateCredentails from "../../helper/credentialValidator"
 
 
 export default function Signin() {
-    const navigate = useNavigate()
-    // const [isOverlayClicked,setIsOverlayClicked] = useState(true)
     const [isPasswordHidden, setPasswordHidden] = useState(true)
     const [isEmailInvalid, setIsEmailInvalid] = useState(false)
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false)
@@ -44,7 +41,6 @@ export default function Signin() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
        
-
                 try {
                     setSendingResponse(true)
                     const response = await axios.post(`${backendUrl}/signin`, userDetails,{withCredentials:true})
@@ -69,6 +65,7 @@ export default function Signin() {
                     }
                    else{
                     setError(prevState=>({
+                        ...prevState,
                         isError:true,
                         error:response.data.msg
                     }))
@@ -80,6 +77,7 @@ export default function Signin() {
                 } catch (error) {
                     console.log(error)
                     setError(prevState => ({
+                         ...prevState,
                         isError: true,
                         error: "Server didn't respond try again later"
                     }))
