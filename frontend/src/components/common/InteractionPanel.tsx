@@ -25,26 +25,26 @@ export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) 
    const Facebook_app_id = import.meta.env.VITE_FACEBOOK_APP_ID
    const ShareLinks =[
       {     name:"linkedin",
-           link:`https://www.linkedin.com/shareArticle?mini=true&url=https://yourwebsite.com&title=This%20post%20was%20created%20using%20my%20own%20website!&summary=Check%20it%20out%20here&source=http://localhost:5173` ,
+           link:`https://www.linkedin.com/shareArticle?mini=true&url=https://yourwebsite.com&title=This%20post%20was%20created%20using%20my%20own%20website!&summary=Check%20it%20out%20here&source=https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app/${postId}` ,
            img:linkedin
         },
      {     name:"whatsapp",
-           link:`https://api.whatsapp.com/send?text=This%20post%20was%20created%20using%20my%20own%20website!%20http://localhost:5173:/post/${postId}`,
+           link:`https://api.whatsapp.com/send?text=This%20post%20was%20created%20using%20my%20own%20website!%20https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app/post/${postId}`,
            img:whatsapp
         },
       {    name:"facebook",
            link:`http://www.facebook.com/dialog/feed?  
 app_id=${Facebook_app_id}&  
-link=https://www.google.com&  
+link=https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app/${postId}&  
 name=Facebook%20Dialogs&  
 caption=Post%20Link& 
 description=Dialogs%20provide%20a%20simple,%20consistent%20interface%20for%20applications%20to%20interact%20with%20users.&
 message=Facebook%20Dialogs%20are%20so%20easy!&
-redirect_uri=http://www.example.com/response`,
+redirect_uri=https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app`,
            img:facebook
         },
      {     name:"twitter",
-           link:`https://twitter.com/intent/tweet?text=This%20post%20was%20created%20using%20my%20own%20website!%20&url=http://localhost:5173:/post/${postId}` ,
+           link:`https://twitter.com/intent/tweet?text=This%20post%20was%20created%20using%20my%20own%20website!%20&url=https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app/post/${postId}` ,
            img:twitter
         },
      
@@ -181,7 +181,7 @@ useEffect(()=>{
 
           <button  onClick={()=>{
             //@ts-ignore
-            navigator.clipboard.writeText(`http://localhost:5173:/post/${postId}`).then(text=>{
+            navigator.clipboard.writeText(`https://blognation-fnr1axpyf-omarameen01s-projects.vercel.app//post/${postId}`).then(text=>{
                setTextCopied(true)
             })
           }}><img src={isTextCopied?tick:copy} className="h-6 w-6"  alt="Copy text" /></button>
