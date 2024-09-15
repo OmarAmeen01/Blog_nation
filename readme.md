@@ -50,5 +50,5 @@ Welcome to my full-stack blog application—a modern web platform designed to ha
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/
-   cd your-repo-folder
+   git clone https://github.com/OmarAmeen01/Blog_nation.git
+
