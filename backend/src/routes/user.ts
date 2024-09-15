@@ -23,7 +23,7 @@ export const userRouter = new Hono<{
 /// note her  how are cors handled and how to send cookie from server and store it in browser with ease
 
 userRouter.use('*', cors({
-    origin: 'https://blog-nation-three.vercel.app', // Allow requests from this origin
+    origin: 'http://localhost:5173', // Allow requests from this origin
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials:true,
     allowHeaders: ['Content-Type', 'Authorization'] 

@@ -44,7 +44,7 @@ export default function Footer({className}:{className?:string}){
         <div className={`border-t-2 p-2    text-sm border-black flex justify-center gap-4 ${className} `}>
          {footerLinks.map(link=>{
             return (
-              loginStatus?  <Link key={link.path} to={link.path} className=" text-gray-700 ease-in-out  hover:underline hover:underline-offset-4 " >{link.name}</Link>:<button onClick={handleClick}>{link.name}</button>
+              loginStatus?  <Link key={link.name+link.path} to={link.path} className=" text-gray-700 ease-in-out  hover:underline hover:underline-offset-4 " >{link.name}</Link>:<button onClick={handleClick}>{link.name}</button>
             )   
          })}
         </div>

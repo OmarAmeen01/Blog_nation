@@ -39,7 +39,7 @@ export default function Profile(){
    })
 
    axiosBlogInstance.get(`/dashboard/${id}`,{withCredentials:true}).then(response=>{
-    if(response.data.data){
+    if(response.data.status){
         setPosts(response.data.data.slice(0,2))
         setIsLoading(false)
 
@@ -74,7 +74,7 @@ export default function Profile(){
                 border 
                 "/>
                 <img src={profile?.image?profile.image:ProfilePic} alt=""
-                  className="rounded-full border-2 border-black w-28 h-28 absolute top-28" id="profile" /> 
+                  className="rounded-full border-2 border-black md:w-32 w-28 h-28 md:h-32 absolute top-28  left-6 md:left-[4.5rem]" id="profile" /> 
                <div id="Name and Edit pannel" className="pt-16 pb-4 flex justify-between">
                               
                 <div id="name" className="p-2 gap-2  flex">
@@ -109,7 +109,7 @@ export default function Profile(){
 
       
              <h4 className="text-3xl font-semibold p-2">Activity</h4>
-            {isLoading?<DashboardSkeletonLoader/> :posts.length===0? userDetails.id===id?<div><h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on <Link to="/addpost" className="text-sky-500 hover:opacity-70 hover:underline underline-offset-4">Write</Link> </h4></div>:<h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on </h4> : <div id="posts" className="px-4 lg:px-14">
+            {isLoading?<DashboardSkeletonLoader/> : posts.length===0? <div><h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on {userDetails.id===id&&<Link to="/addpost" className="text-sky-500 hover:opacity-70 hover:underline underline-offset-4">Write</Link>} </h4></div>: <div id="posts" className="px-4 lg:px-14">
      {posts.map(post => {
     return (<ListPost key={post.id} post={post}/>
     ) 

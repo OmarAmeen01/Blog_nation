@@ -13,7 +13,7 @@ export const blogRouter  = new Hono<{
 }>()
 
 blogRouter.use('*', cors({
-    origin: 'https://blog-nation-three.vercel.app', // Allow requests from this origin
+    origin: 'http://localhost:5173', // Allow requests from this origin
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials:true,
     allowHeaders: ['Content-Type', 'Authorization'] 
@@ -112,7 +112,7 @@ return c.json({
 })
 
 // get a specific users post 
-blogRouter.get("/dashboard/:id",authMiddleware,async(c)=>{   
+blogRouter.get("/dashboard/:id",async(c)=>{   
     const DATABASE_URL =c.env.DATABASE_URL
     const userId = c.req.param("id")
 
