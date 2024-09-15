@@ -30,7 +30,7 @@ useEffect(()=>{
     if(res.data.status){
          const data:Post = res.data.data
          //editor init
-         setContent(data.content[0])// undefined why?
+         setContent(data.content[0])
          setContentId(data.content[0].id)
          setCategory(data.category)
           const editor = new EditorJS(

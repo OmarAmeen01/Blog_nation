@@ -13,7 +13,7 @@ export const blogRouter  = new Hono<{
 }>()
 
 blogRouter.use('*', cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
+    origin: 'https://blog-nation-three.vercel.app', // Allow requests from this origin
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials:true,
     allowHeaders: ['Content-Type', 'Authorization'] 
