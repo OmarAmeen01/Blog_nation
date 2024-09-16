@@ -5,8 +5,7 @@ export default function   DashboardSkeletonLoader(){
  
     <article id="userDetails" className="border-b-2 p-3 px-4 lg:px-14 bg-white">
     <div className="flex justify-between">
-    <div className="text-lg font-bold hover:underline underline-offset-4 
-     font-sans hover:opacity-60  lg:text-2xl bg-gray-500 w-32  h-4  animation ">
+    <div className="hover:opacity-60   bg-gray-500 w-32  h-4  animation ">
     </div>
     <div  className="flex items-center bg-gray-500 p-1 hover:opacity-65 rounded-md w-40 h-4  animation ">
     </div>

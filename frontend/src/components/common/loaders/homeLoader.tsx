@@ -6,7 +6,7 @@ export default function HomeLoader(){
         <div id="nav" className=" bg-white p-4 flex justify-between">
         <div className="p-2 w-48  h-9 my-3 flex animation bg-gray-500">  </div>
       <div className="flex gap-4">
-      <div className="p-2 w-28  h-7 mt-5 flex animation bg-gray-500">  </div>
+      <div className="p-2 w-28 round  h-7 mt-5 flex animation bg-gray-500">  </div>
       <div className="p-2 w-28  h-7  mt-5 flex animation bg-gray-500">  </div>
       <div  className="p-2 w-9 rounded-full  h-9 my-3 flex animation bg-gray-500"> </div>
       </div>

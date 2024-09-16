@@ -60,7 +60,7 @@ useEffect(()=>{
 setInterval(()=>{
   setGetNotificationState(prev=>!prev)
   setNewNottiArrived(false)
-},1000*60*10)
+},1000*60*5)
 
 
 
@@ -84,9 +84,9 @@ useEffect(()=>{
     if(newNotiArrived){
     
       axiosUserInstance.get(`/unWatch`,{withCredentials:true} ).then(res=>{
-        const unWatched = res.data.data.un_watched
+        
         const watched = res.data.data.watched
-        if(unWatched===null && watched===0){
+        if( watched===0){
     
           const unWatchedNotifications=newNotifications.length
          
@@ -96,19 +96,14 @@ useEffect(()=>{
         }else{
           
         
-            const unWatchedNotifications= newNotifications.length-watched +unWatched
-            dispatch(setUnWatched(unWatchedNotifications))
+            const unWatchedNotifications= newNotifications.length-watched
+                        dispatch(setUnWatched(unWatchedNotifications))
             axiosUserInstance.put(`/unWatch`,{
               un_watched:unWatchedNotifications},{withCredentials:true})
           
           }
        })
-    }else{
-       const unWatchedNotifications=newNotifications.length
-         
-          dispatch(setUnWatched(unWatchedNotifications))
-          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true})
-    }
+      }
     
     },[newNotiArrived])
 

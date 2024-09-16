@@ -158,7 +158,7 @@ useEffect(()=>{
    return <div className="flex gap-3 p-2">
 
       <button onClick={HandleLikeClick} className="hover:opacity-60 flex gap-1">
-         <img className="h-6 w-6 " src={isLikeClicked ? unlike : like} title="Like" alt="" />
+         <img className="h-6 w-6" src={isLikeClicked ? unlike : like} title="Like" alt="" />
          <p id="like" className="text-gray-500">{likeCount}</p>
       </button>
      {isCommentClicked&& <CommentComponet ownerId={ownerId} comments={comments} postId={postId} updateComponent={handleComponentUpdate} isCommentClicked={isCommentClicked} handleToggle={handleCommentClick}/>}
