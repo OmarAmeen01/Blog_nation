@@ -1,16 +1,38 @@
 import { useEffect,useState } from "react"
 import threeDot from "../../assets/threeDots.svg"
 import verifyPostOwner from "../../helper/verifyPostOwner"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import ConfimationDailog from "./confirmationDailog"
-export default function AdmimEditPannel({postId}:{postId:string}){
+import axiosUserInstance from "../../api/AxiosUserInstance"
+
+
+export default function AdmimEditPannel({postId,ownerId}:{postId:string,ownerId:string}){
 const [isLoading,setIsLoading] =useState(true)
 const [isDeleteClicked,setIsDeletdClicked] = useState(false)
 const [isPannelClick,setIsPannelClicked] =useState(false)
 const [posts,setPosts] = useState([])
+const [watched,setWatched] = useState<number>(0)
 
 const navigate = useNavigate()
+
+
+
+useEffect(()=>{
+if(isDeleteClicked){
+  axiosUserInstance.get(`/watched/${ownerId}`).then(res=>{
+    if(res.data.status){
+      console.log(res.data)
+      if(watched>0){
+        setWatched(res.data.data.watched-1)
+      }else{
+        setWatched(res.data.data.watched)
+      }
+    }
+})
+}
+},[isDeleteClicked])
+  
 
 
     useEffect(()=>{
@@ -31,11 +53,17 @@ const navigate = useNavigate()
     },[])
 //function
 
-async function handleDeleteClick(postId:string){
+async function handleDeleteClick(postId:string,ownerId:string){
     const response =await axiosBlogInstance.delete(`/delete_post/${postId}`,{
         withCredentials:true
     })
     if(response.data.status){
+
+    axiosUserInstance.put(`/watched/${ownerId}`,{watched:watched},{withCredentials:true}).then(res=>{
+            if(res.data.status){
+            }
+    })
+
   if(window.location.pathname==="/" || window.location.pathname==="/dashboard" || window.location.pathname==="/dashboard/:id"){
     window.location.reload()
   }else{
@@ -72,7 +100,7 @@ return  isLoading?null: verifyPostOwner(postId,posts)&&
 
 </div>
 <ConfimationDailog
-ShouldShow={isDeleteClicked} handleCancel={handCancelClick} handleVisibility={()=>setIsPannelClicked(prev=>!prev)}  handleAgree={()=>handleDeleteClick(postId)} title="Delete Story" description="Deleting the story is a irreversible, are you sure?" />
+ShouldShow={isDeleteClicked} handleCancel={handCancelClick} handleVisibility={()=>setIsPannelClicked(prev=>!prev)}  handleAgree={()=>handleDeleteClick(postId,ownerId)} title="Delete Story" description="Deleting the story is a irreversible, are you sure?" />
 
 </>
 

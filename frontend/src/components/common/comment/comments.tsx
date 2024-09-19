@@ -32,10 +32,19 @@ msg:""
   const [text, setText] = useState("")
   const [sentresponse,setsentResponse] = useState(false)
   const userDetails = useSelector<Store>(state => state.auth.userData) as User
+ 
+
+
+
+
+    
+
 
   function handleSubmit() {
   axiosBlogInstance.post(`/comment/${postId}`,{text:text},{withCredentials:true}).then(res=>{
     if(res.data.status){
+            
+            
     const data = res.data.data
     updateComponent()
     setNotification(prev=>({
@@ -85,7 +94,7 @@ updateComponent()
     <article id="comments">
       <h4 className="text-2xl font-bold p-4 border-b-2">Comments</h4>
       {comments.map(comment => {
-        return <Comment comment={comment} handleComponentUpdate={handleComponentUpdate}/>
+        return <Comment comment={comment} handleComponentUpdate={handleComponentUpdate} ownerId={ownerId}/>
       })}
     </article>
   </section>

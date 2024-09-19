@@ -70,6 +70,9 @@ if(typeof userId==="string"){
                 image:true
             }
         }
+       },
+       orderBy:{
+        created_at:"desc"
        }
     })
     if(posts.length>0){
@@ -160,6 +163,10 @@ if(typeof userId==="string"){
                 image:true
             }
         }
+       }
+       ,
+       orderBy:{
+        created_at:"desc"
        }
     })
     if(posts.length>0){
@@ -319,6 +326,9 @@ include:{
             image:true
         }
     }
+},
+orderBy:{
+ created_at:"desc"
 }
    })
 if(posts){

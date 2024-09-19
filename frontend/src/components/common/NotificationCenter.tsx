@@ -27,7 +27,7 @@ useEffect(()=>{
 function handleVisibility(){
    setBellClicked(prev=>!prev)
    dispatch(setUnWatched(0))
-   axiosUserInstance.put(`/Watched`,{ watched:notifications.length},{withCredentials:true})
+   axiosUserInstance.put(`/Watched`,{ watched:notifications.length,un_watched:0},{withCredentials:true})
 }
 
     return <div className="py-2 pr-4 ">
@@ -46,8 +46,7 @@ function handleVisibility(){
          <div id="overlay " className="absolute  top-0 -left-[60rem] -z-10 w-[400%] h-[105vh]" onClick={handleVisibility}></div>
        </div>:notifications.map(notification=>{
          return <div key={notification.timestamp}>
-
-     
+         
          <Link to={`/post/${notification.post_id}`} >
             <div className="flex gap-5 p-4 border-b-2  justify-between">
          <div id="user" className="flex gap-4">

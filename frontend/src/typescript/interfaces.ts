@@ -75,7 +75,8 @@ export interface NotificationSettings{
 export interface Noti{
   notificationSettings:NotificationSettings,
     notifications:Notification[],
-    unWatched:number
+    unWatched:number,
+    watched:number,
 
 }
 export interface Notification{

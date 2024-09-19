@@ -20,7 +20,6 @@ import { validateNotification } from "mediumvalidate"
 import axiosBlogInstance from "../../api/AxiosBlogInstance"
 import axiosUserInstance from "../../api/AxiosUserInstance"
 
-
 export default function ({ postId,ownerId }: { postId: string ,ownerId:string}) {
    const Facebook_app_id = import.meta.env.VITE_FACEBOOK_APP_ID
    const ShareLinks =[
@@ -54,7 +53,7 @@ redirect_uri=https://blog-nation-three.vercel.app`,
    const [isCommentClicked, setisCommentClicked] = useState(false)
    const [isShareClicked, setisShareClicked] = useState(false)
   const [comments, setComments] = useState<Comments[]>([])
-
+  const [watched,setWatched] = useState<number>(0)
    const [isLikeClicked,setIsLikeClicked] = useState(false)
    const [likeCount,setLikeCount] = useState<number>()
   const [isTextCopied,setTextCopied]= useState(false)
@@ -88,6 +87,21 @@ redirect_uri=https://blog-nation-three.vercel.app`,
 
   },[isLikeClicked])
 
+
+
+  useEffect(()=>{
+ if(!isLikeClicked){
+   axiosUserInstance.get(`/watched/${ownerId}`).then(res=>{
+      if(res.data.status){
+ if(watched>0){
+   setWatched(res.data.data.watched-1)
+ }else{
+   setWatched(res.data.data.watched)
+ }
+      }
+  })
+ }
+  },[isLikeClicked])
   useEffect(() => {
 
    axiosBlogInstance.get(`/comments/${postId}`, { withCredentials: true }).then(res => {
@@ -111,7 +125,7 @@ redirect_uri=https://blog-nation-three.vercel.app`,
           axiosBlogInstance.post(`/like/${postId}`, {}, {
              withCredentials: true
           }).then(res => {
-            
+
              if (res.data.status) {
                const data =res.data.data
                setNotification(prev=>({
@@ -131,6 +145,11 @@ redirect_uri=https://blog-nation-three.vercel.app`,
        } else {
           axiosBlogInstance.delete(`/like/${postId}`, { withCredentials: true }).then(res => {
              if (res.data.status) {
+               axiosUserInstance.put(`/watched/${ownerId}`,{watched:watched},{withCredentials:true}).then(res=>{
+                  console.log(res.data)
+                  if(res.data.status){
+                  }
+               })
                 setIsLikeClicked(prev=>!prev)
              }
           })

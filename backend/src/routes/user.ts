@@ -806,6 +806,9 @@ userRouter.get('/notifications',authMiddleware,async(c)=>{
                                         image:true
                                     }
                                 }
+                               },
+                               orderBy:{
+                                timestamp:"desc"
                                }
                         })
                       
@@ -886,7 +889,7 @@ userRouter.get("/unWatch",authMiddleware,async(c)=>{
 })
 userRouter.put("/Watched",authMiddleware,async(c)=>{
     const DATABASE_URL= c.env.DATABASE_URL
-    const {watched}= await c.req.json()
+    const {watched, un_watched}= await c.req.json()
     const cookie = getCookie(c,"authorization")
     if(cookie){
 
@@ -904,8 +907,12 @@ userRouter.put("/Watched",authMiddleware,async(c)=>{
               const unWatch =await prisma.user.update({
                 where:{id:userId},
                  data:{
-                    un_watched:0,
-                    watched:watched
+                    watched:watched,
+                    un_watched:un_watched
+                 },
+                 select:{
+                    un_watched:true,
+                    watched:true
                  }
               })
 
@@ -913,7 +920,7 @@ userRouter.put("/Watched",authMiddleware,async(c)=>{
 
                   return c.json({
                       msg:"Reseted watch state",
-                      data:{un_watched:0},
+                      data:unWatch,
                       status:true
                     })
               }else{
@@ -988,3 +995,94 @@ userRouter.put("/unWatch",authMiddleware,async(c)=>{
    
    })
 
+   userRouter.put("/watched/:userId",authMiddleware,async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
+    const {un_watched,watched}= await c.req.json()
+   const userId = c.req.param("userId")
+    
+           try {
+               const prisma = new PrismaClient({
+                   datasourceUrl: DATABASE_URL
+               }).$extends(withAccelerate())
+            
+               
+               if(typeof userId ==="string"){
+                 const unWatch =await prisma.user.update({
+                   where:{id:userId},
+                    data:{
+                        un_watched:un_watched,
+                      watched:watched
+                    },
+                    select:{
+                        un_watched:true,
+                        watched:true
+                    }
+                 })
+                 if(unWatch){
+
+
+                     return c.json({
+                         msg:"Updated watch state",
+                         data:unWatch,
+                         status:true
+                     })
+                 }else{
+                    return c.json({
+                        msg:"model was not updated",
+                        status:false
+                    })
+                 }
+               }
+           
+           }catch (error) {
+            console.log(error)
+               return c.json({
+                   msg:"Something went wrong",
+                   status:false
+               })
+           }       
+   
+   
+   })
+
+   userRouter.get("/watched/:userId",async(c)=>{
+    const DATABASE_URL= c.env.DATABASE_URL
+  const userId = c.req.param("userId")
+ 
+        try {
+            const prisma = new PrismaClient({
+                datasourceUrl: DATABASE_URL
+            }).$extends(withAccelerate())
+         
+            
+            if(typeof userId ==="string"){
+              const unWatch =await prisma.user.findFirst({
+                where:{id:userId},
+                select:{
+                    un_watched:true,
+                    watched:true,
+                }
+              })
+            if(unWatch){
+                return c.json({
+                    msg:"Found watch state",
+                    data:unWatch,
+                    status:true
+                })
+            }else{
+                return c.json({
+                    msg:"Nothing was found",
+                    status:false
+                })
+            }
+            }
+        
+        }catch (error) {
+            return c.json({
+                msg:"Something went wrong",
+                status:false
+            })
+        }       
+
+
+})

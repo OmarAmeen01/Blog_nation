@@ -6,7 +6,7 @@ import Footer from './components/common/footer'
   import { authenticate } from './store/authSlice'
   import { useDispatch} from 'react-redux'
 import { useEffect , useState} from 'react'
-import { setNotifications, setUnWatched } from './store/notiSlice'
+import { setNotifications, setUnWatched, setWatched } from './store/notiSlice'
 import { setNotiStates } from './store/notiSlice'
 import HomeLoader from './components/common/loaders/homeLoader'
 import axiosUserInstance from './api/AxiosUserInstance'
@@ -60,7 +60,7 @@ useEffect(()=>{
 setInterval(()=>{
   setGetNotificationState(prev=>!prev)
   setNewNottiArrived(false)
-},1000*60*5)
+},1000*60)
 
 
 
@@ -91,15 +91,17 @@ useEffect(()=>{
           const unWatchedNotifications=newNotifications.length
          
           dispatch(setUnWatched(unWatchedNotifications))
-          axiosUserInstance.put(`/unWatch`,{un_watched:unWatchedNotifications},{withCredentials:true})
+ 
           
         }else{
           
-        
+                dispatch(setWatched(watched))
             const unWatchedNotifications= newNotifications.length-watched
-                        dispatch(setUnWatched(unWatchedNotifications))
-            axiosUserInstance.put(`/unWatch`,{
-              un_watched:unWatchedNotifications},{withCredentials:true})
+            if(unWatchedNotifications>0){
+              dispatch(setUnWatched(unWatchedNotifications))
+
+            }
+  
           
           }
        })

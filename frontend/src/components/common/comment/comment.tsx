@@ -1,18 +1,40 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import Button from "../button"
 import { Comments, User } from "../../../typescript/interfaces"
 import profile from "../../../assets/profile.png"
 import threeDot from "../../../assets/threeDots.svg"
 import formatDate from "../../../helper/dateConverter"
-import { useSelector } from "react-redux"
+import { useSelector} from "react-redux"
 import { Store } from "../../../typescript/interfaces"
 import axiosBlogInstance from "../../../api/AxiosBlogInstance"
-export default function Comment({ comment, handleComponentUpdate }: { comment: Comments, handleComponentUpdate: () => void }) {
+import axiosUserInstance from "../../../api/AxiosUserInstance"
+import { setUnWatched } from "../../../store/notiSlice"
+export default function Comment({ comment, handleComponentUpdate,ownerId }: { comment: Comments, handleComponentUpdate: () => void, ownerId:string }) {
     const [optionClicked, setOptionClicked] = useState(false)
     const [editClicked, setEditClicked] = useState(false)
     const [editText, setEditText] = useState("")
     const editReff = useRef<HTMLInputElement>(null)
+    const [isDeleteClicked,setIsDeletdClicked] = useState(false)
     const userDetails = useSelector<Store>(state => state.auth.userData) as User
+    const [watched,setWatched] = useState<number>(0)
+
+
+   useEffect(()=>{
+ if(isDeleteClicked){
+    axiosUserInstance.get(`/watched/${ownerId}`).then(res=>{
+        if(res.data.status){
+            setUnWatched(res.data.data.un_watched+1)
+            if(watched>0){
+                setWatched(res.data.data.watched-1)
+              }else{
+                setWatched(res.data.data.watched)
+              }
+        }
+    })
+ }
+   },[isDeleteClicked])
+     
+
 
     function handleUpdate() {
         axiosBlogInstance.put(`/edit_comment/${comment.post_id}/${comment.id}`, { text: editText }, { withCredentials: true }).then(res => {
@@ -24,9 +46,16 @@ export default function Comment({ comment, handleComponentUpdate }: { comment: C
 
 
     function handleDelete() {
+         setIsDeletdClicked(true)
  //@ts-ignore
-        axiosBlogInstance.delete(`/delete_comment/${comment.post_id}/${comment.id}`, { withCredentials: true }).then(res => {        
-            
+        axiosBlogInstance.delete(`/delete_comment/${comment.post_id}/${comment.id}`, { withCredentials: true }).then(res => {   
+             
+            axiosUserInstance.put(`/watched/${ownerId}`,{watched:watched},{withCredentials:true}).then(res=>{
+                if(res.data.status){
+                    console.log(res.data)
+                    setIsDeletdClicked(false) 
+                }
+            })
             setOptionClicked(prev => !prev)
             handleComponentUpdate()
         })

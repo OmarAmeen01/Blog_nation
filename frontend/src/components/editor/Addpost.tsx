@@ -18,7 +18,6 @@ export default function AddPost(){
   const [category,setCategory] = useState("")
   const [isReponseSend,setResponseSend] = useState(false)
   const [notification,setNotification] = useState<validateNotification>({
-   
    user_id:"",
  type:"",
  post_id:"",
@@ -28,7 +27,6 @@ export default function AddPost(){
   const navigate = useNavigate()
 
 let editorReff= useRef<EditorJS|null|boolean>(null)
-
 useEffect(()=>{
   
   if(!editorReff.current){

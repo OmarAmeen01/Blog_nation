@@ -52,7 +52,7 @@ export default function PostComponent() {
             </div>
         </article>
      <article id="controllers" className="p-3 flex relative justify-between">
-        <InteractionPanel postId={post.id} ownerId={post.user_id}/> <AdmimEditPannel postId={post.id}/>
+        <InteractionPanel postId={post.id} ownerId={post.user_id}/> <AdmimEditPannel postId={post.id} ownerId={post.user_id}/>
      </article>
         <article id="post" className="p-3">
              {post.content[0].blocks.map(block=>{
