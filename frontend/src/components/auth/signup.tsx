@@ -150,7 +150,7 @@ export default function Signup() {
                 setIsEmailInvalid(false);
                 setUserDetails(prevState => ({
                     ...prevState,
-                    email: e.target.value
+                    email: e.target.value.toLowerCase()
                 }))
                 console.log(userDetails)
             }} label="Email" />

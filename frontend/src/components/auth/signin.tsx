@@ -103,7 +103,7 @@ export default function Signin() {
                 setIsEmailInvalid(false);
                 setUserDetails(prevState => ({
                     ...prevState,
-                    email: e.target.value
+                    email: e.target.value.toLowerCase()
                 }))
             }} label="Email" />
  
