@@ -10,7 +10,6 @@ const initialState = {
   },
     notifications:[],
     unWatched:0,
-    watched:0
 }
 
 export const  notiReducer = createSlice({
@@ -38,11 +37,8 @@ export const  notiReducer = createSlice({
         setUnWatched:(state,action)=>{
           state.unWatched =action.payload
         },
-        setWatched:(state,action)=>{
-       state.watched= action.payload
-        }
     }
 })
 
-export const {setNotiStates,setNotifications,setUnWatched,setWatched} = notiReducer.actions
+export const {setNotiStates,setNotifications,setUnWatched} = notiReducer.actions
 export default notiReducer.reducer

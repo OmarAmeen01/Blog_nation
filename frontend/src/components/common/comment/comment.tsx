@@ -8,7 +8,6 @@ import { useSelector} from "react-redux"
 import { Store } from "../../../typescript/interfaces"
 import axiosBlogInstance from "../../../api/AxiosBlogInstance"
 import axiosUserInstance from "../../../api/AxiosUserInstance"
-import { setUnWatched } from "../../../store/notiSlice"
 export default function Comment({ comment, handleComponentUpdate,ownerId }: { comment: Comments, handleComponentUpdate: () => void, ownerId:string }) {
     const [optionClicked, setOptionClicked] = useState(false)
     const [editClicked, setEditClicked] = useState(false)
@@ -23,7 +22,6 @@ export default function Comment({ comment, handleComponentUpdate,ownerId }: { co
  if(isDeleteClicked){
     axiosUserInstance.get(`/watched/${ownerId}`).then(res=>{
         if(res.data.status){
-            setUnWatched(res.data.data.un_watched+1)
             if(watched>0){
                 setWatched(res.data.data.watched-1)
               }else{
