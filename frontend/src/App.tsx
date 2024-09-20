@@ -60,7 +60,7 @@ useEffect(()=>{
 setInterval(()=>{
   setGetNotificationState(prev=>!prev)
   setNewNottiArrived(false)
-},5000*60)
+},1000*60*5)
 
 
 
