@@ -34,6 +34,7 @@ function handleSubmit(){
      setChangingPassword(true)
     if(response.data.status){
       
+         setChangedPassword(true)
          setPasswords(prev=>({
             ...prev,
             newPassword:"",
@@ -60,12 +61,13 @@ setIsPasswordMatching(false)
     return shouldShow && <>
      
       <div id="overlay " className="fixed   bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[104.6vw] h-[122vh]" onClick={handleVisibility}></div>
-      {changingPassword?<div className="z-20 relative overflow-hidden top-48 left-2 md:left-2  bg-white rounded-lg w-[170px]  sm:w-[220px]  lg:left-1">
-    <p className=" text-sm sm:text-lg font-bold p-4 font-mono rounded-lg  popup-animation">
-        Changing Password
+      {changedPassword?<div className="z-20 relative overflow-hidden -top-16 left-1 md:left-2  bg-white p-4 rounded-lg md:p-8 lg:w-[500px] lg:left-16">
+    <p className="bg-green-500 text-2xl font-bold  p-4 font-mono rounded-lg text-white">
+        Password Changed successfully
     </p>
     <div id="form-loading" className="absolute top-0 bg-green-500" ></div>
-</div> : <div className="z-20 fixed  top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-white p-4  rounded-lg md:p-8 ">
+
+</div> : <div className="z-20 fixed  top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-white p-4 rounded-lg md:p-8">
     <h4 className="p-2 text-2xl font-bold text-center text-mono"> Change password</h4>
            <div id="pass-word" className=" relative group ">
            <InputComponet id="Old Password" type={passwordVisbility.isPasswordHidden ? "password" : "text"} placeholder="Password..." name="password"
