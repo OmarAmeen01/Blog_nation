@@ -109,9 +109,9 @@ export default function Signup() {
        
             dispatch(setIsFormVisible(!isFormVisible)) }}>    
             </div>
-      <div className="fixed  z-30 top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-4 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-2 sm:p-4 my-24 ">
+      <div className="fixed  z-30 top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full  min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4  mt-24 mb-24">
      
-{isSigninClicked?<Signin/> :   <form className="bg-white px-6 py-2 rounded-lg shadow-lg  relative overflow-hidden max-w-[523px]" onSubmit={handleSubmit}>
+{isSigninClicked?<Signin/> :   <form className="bg-white px-6 py-2 rounded-lg shadow-lg   relative overflow-hidden "  onSubmit={handleSubmit}>
      {sendingResponse&&<div id="form-loading" className="absolute top-0" ></div>}
        <h2 className="font-bold text-2xl text-center">Create a account</h2>
             { error.isError&&<p className="text-red-500 text-lg text-center">{error.error}</p>}

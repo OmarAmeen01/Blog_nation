@@ -92,7 +92,7 @@ export default function Signin() {
          dispatch(setIsSigninClicked(!isSigninClicked))
         dispatch(setIsFormVisible(!setIsFormVisible)) }}>    </div>
     
-<div className="fixed  z-30 top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full mx-4 sm:mx-0 min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4  mt-24 mb-24">
+<div className="fixed  z-30 top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full  min-[400px]:left-[50%] min-[400px]:mx-0 md:w-[45rem] p-4  mt-24 mb-24">
        {isSignupClicked?<Signup/>:<form className="bg-white px-6 py-2 rounded-lg shadow-lg   relative overflow-hidden " onSubmit={handleSubmit}>
      {sendingResponse&& <div id="form-loading" className="absolute top-0" ></div>}
        <h2 className="font-bold text-2xl p-2 text-center">Sign in to your account</h2>
