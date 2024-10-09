@@ -111,5 +111,13 @@ animation:formloading 2s ease-in-out 0s infinite ;
   min-height: 20px; /* Adjust to ensure there's space for placeholder */
 }
 
-
+.popup-animation{
+  animation: popup 200ms linear 200ms ;
+}
+@keyframes popup {
+  
+  0%{
+    transform:translateX(-600px)
+  }
+}
 /* Paragraph block styles */
