@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import InteractionPanel from "./InteractionPanel";
 import AdmimEditPannel from "./adminEditPannel";
 import formatDate from "../../helper/dateConverter";
-export default function ListPost({post}:{post:Post}){
-    return (<div key={post.id} id={post.id} className="p-2 flex bg-white border-2 rounded-lg shadow-lg my-3 max-[630px]:justify-center max-[630px]:items-center  sm:justify-between">
+export default function ListPost({post,className}:{post:Post,className?:string}){
+    return (<div key={post.id} id={post.id} className={`p-2 flex bg-white border-2 rounded-lg shadow-lg my-3 max-[630px]:justify-center max-[630px]:items-center  sm:justify-between ${className}`}>
 <div className="   p-2 w-full" id="post desc">
 <Link to ={`/profile/${post.user_id}`}> 
    <div id="author" className="flex relative" title="Go to Profile">

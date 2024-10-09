@@ -63,9 +63,9 @@ export default function Profile(){
 
 
  return  <>
-          <section className="relative md:px-16 px-4"> 
+          <section className="relative md:px-16  mb-3 "> 
 
-            <article className="bg-white p-4">
+            <article className="bg-white p-4 ">
 
 
    
@@ -103,15 +103,14 @@ export default function Profile(){
              
              </article>
 
-          <article className="bg-white p-4 mt-2 
-          ">
+          <article className="bg-white  mt-2 pb-3">
 
 
       
              <h4 className="text-3xl font-semibold p-2">Activity</h4>
             {isLoading?<DashboardSkeletonLoader/> : posts.length===0? <div><h4 className="text-sm py-2 font-medium text-center text-gray-400 lg:text-lg ">It looks empty here try adding a post on {userDetails.id===id&&<Link to="/addpost" className="text-sky-500 hover:opacity-70 hover:underline underline-offset-4">Write</Link>} </h4></div>: <div id="posts" className="px-4 lg:px-14">
      {posts.map(post => {
-    return (<ListPost key={post.id} post={post}/>
+    return (<ListPost key={post.id} post={post} className="mx-1"/>
     ) 
   })
 

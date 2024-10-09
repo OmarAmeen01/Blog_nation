@@ -39,7 +39,7 @@ export default function PostComponent() {
 
     }, [postId])
 
-    return loading ? <DashboardSkeletonLoader /> : <section id="post" className="md:p-20 p-8 bg-white ">
+    return loading ? <DashboardSkeletonLoader /> : <section id="post" className="md:p-20 p-4 bg-white ">
         <article id="user" className="relative p-3">
             <Link to={`/profile/${post.user_id}`}>
                 <div id="author" className="flex relative" title="Go to Profile">
