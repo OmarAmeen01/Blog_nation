@@ -34,7 +34,7 @@ function handleSubmit(){
      setChangingPassword(true)
     if(response.data.status){
       
-         setChangedPassword(true)
+         setChangingPassword(true)
          setPasswords(prev=>({
             ...prev,
             newPassword:"",
@@ -61,9 +61,9 @@ setIsPasswordMatching(false)
     return shouldShow && <>
      
       <div id="overlay " className="fixed   bg-[rgba(0,0,0,0.4)] top-0 left-0 z-10 w-[104.6vw] h-[122vh]" onClick={handleVisibility}></div>
-      {changedPassword?<div className="z-20 relative overflow-hidden -top-16 left-1 md:left-2  bg-white p-4 rounded-lg md:p-8 lg:w-[500px] lg:left-16">
-    <p className="bg-green-500 text-2xl font-bold  p-4 font-mono rounded-lg text-white">
-        Password Changed successfully
+      {changingPassword?<div className="z-20 relative overflow-hidden top-32 left-1 md:left-2  bg-white  rounded-lg  w-[180px] sm:w-[220px] lg:-left-11 popup-animation">
+    <p className="text-lg sm:text-xl font-bold  p-4 font-mono rounded-lg">
+       Changing password
     </p>
     <div id="form-loading" className="absolute top-0 bg-green-500" ></div>
 
