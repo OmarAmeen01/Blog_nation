@@ -26,15 +26,13 @@ function handleSubmit(){
   
     if(confirmPassword===passwords.newPassword){
 
-  
+        setChangingPassword(true)
 
 
  axios.put(`${userApiUrl}/change_password`,passwords,{withCredentials:true}).then(response=>{
-
-     setChangingPassword(true)
     if(response.data.status){
       
-         setChangingPassword(true)
+ 
          setPasswords(prev=>({
             ...prev,
             newPassword:"",
