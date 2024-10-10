@@ -46,9 +46,6 @@ Welcome to my full-stack blog application—a modern web platform designed to ha
 - **Security:** JWT & Cookie-based authentication, Zod for type checking
 - **Styling:** Tailwind CSS
 
-## 🔧 Installation & Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/OmarAmeen01/Blog_nation.git
+## Check it out here
+https://blog-nation-three.vercel.app/
 
